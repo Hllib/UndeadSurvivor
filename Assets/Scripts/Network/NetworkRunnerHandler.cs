@@ -11,8 +11,9 @@ using UnityEngine.SceneManagement;
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _networkRunner;
-    [SerializeField] private GameObject _spawnPlayersNetwork;
     [SerializeField] private NetworkInputHandler _playerInputHandler;
+    [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
+    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private void Start()
     {
@@ -48,7 +49,33 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        var spawner = _networkRunner.Spawn(_spawnPlayersNetwork, transform.position, Quaternion.identity, player);
+        if (runner.IsServer)
+        {
+            var skinId = PlayerPrefs.GetInt("Skin");
+            NetworkObject networkPlayerObject;
+            switch (skinId)
+            {
+                case 1: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
+                case 2: networkPlayerObject = runner.Spawn(_playerPrefabs[1], GetSpawnPos(), Quaternion.identity, player); break;
+                case 3: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
+                default: networkPlayerObject = null; Debug.LogError("Player prefab not found"); break;
+            }
+            _spawnedCharacters.Add(player, networkPlayerObject);
+        }
+    }
+
+    Vector3 GetSpawnPos()
+    {
+        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+
+        if (spawnPoints.Length == 0)
+        {
+            return Vector3.zero;
+        }
+        else
+        {
+            return spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)].transform.position;
+        }
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
