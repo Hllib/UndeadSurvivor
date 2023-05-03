@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 4345359025208471862}
   - component: {fileID: 4345359025208471861}
   m_Layer: 0
-  m_Name: NetworkPlayer
+  m_Name: NetworkPlayer2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
   AoiPositionSource: {fileID: 0}
   Flags: 2305
   NetworkGuid:
-    RawGuidValue: 742b02f58b00cfb4cad8609e605296f2
+    RawGuidValue: cbcbb87bbeb1d7144a59f4668352197f
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 4345359025208471860}
@@ -281,7 +281,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 50
-  m_Sprite: {fileID: -150523396, guid: 0c187a32c5bde4747be8d00770b07403, type: 3}
+  m_Sprite: {fileID: -1442216141, guid: 8f7a60065e3984c489b9c4d41bc3dc4e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -47,6 +47,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _playerPrefab: {fileID: 4345359025208471860, guid: 742b02f58b00cfb4cad8609e605296f2, type: 3}
+  _playerPrefabs:
+  - RawGuidValue: 742b02f58b00cfb4cad8609e605296f2
+  - RawGuidValue: cbcbb87bbeb1d7144a59f4668352197f
+  - RawGuidValue: 393425998c120e848ab4ffc9bcf321f9
 --- !u!114 &-7447149065345191513
 MonoBehaviour:
   m_ObjectHideFlags: 0
