@@ -10,6 +10,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public static NetworkPlayer Local { get; set; }
     CinemachineVirtualCamera _camera;
 
+    [SerializeField] private Enemy _enemyPerfab;
+
     private void Awake()
     {
         _rb ??= GetComponent<NetworkRigidbody2D>();
@@ -38,12 +40,18 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Runner.Despawn(Object);
         }
     }
-
+    bool hasSpawned = false;
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
         {
             _rb.Rigidbody.velocity = data.direction;
+        }
+
+        if(Input.GetKey(KeyCode.R) && !hasSpawned && Object.HasStateAuthority)
+        {
+            hasSpawned = true;
+            Runner.Spawn(_enemyPerfab, transform.position, Quaternion.identity);
         }
     }
 }
