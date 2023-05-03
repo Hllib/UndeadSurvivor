@@ -11,7 +11,6 @@ using UnityEngine.SceneManagement;
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _networkRunner;
-    //[SerializeField] private NetworkPlayer _player;
     [SerializeField] private GameObject _spawnPlayersNetwork;
     [SerializeField] private NetworkInputHandler _playerInputHandler;
 
@@ -50,7 +49,6 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         var spawner = _networkRunner.Spawn(_spawnPlayersNetwork, transform.position, Quaternion.identity, player);
-        //runner.Spawn(_player, transform.position, Quaternion.identity, player);
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)

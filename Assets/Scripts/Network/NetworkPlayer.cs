@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using Cinemachine;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
     private NetworkRigidbody2D _rb;
     public static NetworkPlayer Local { get; set; }
+    CinemachineVirtualCamera _camera;
 
     private void Awake()
     {
@@ -20,8 +22,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Local = this;
             _rb ??= GetComponent<NetworkRigidbody2D>();
             Debug.Log("Spawned own player");
-            //_camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
-            //_camera.Follow = this.transform;
+            _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
+            _camera.Follow = this.transform;
         }
         else
         {

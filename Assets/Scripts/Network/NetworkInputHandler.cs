@@ -16,10 +16,6 @@ public class NetworkInputHandler : MonoBehaviour
 
         NetworkInputData networkInputData = new NetworkInputData();
         networkInputData.direction = new Vector2(horizontalInput * _speed, verticalInput * _speed);
-
-        Debug.Log("Horizontal input: " + horizontalInput);
-        Debug.Log("Vertical input: " + verticalInput);
-
         //onPlayerInput?.Invoke(horizontalInput, verticalInput);
 
         return networkInputData;
