@@ -12,6 +12,24 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     private GameController _gameControlller;
     [SerializeField] private GameObject _bulletPrefab;
 
+    private int _ammoAmount;
+    private int _health;
+
+    public void AddAmmo(int ammoSurplus)
+    {
+        _ammoAmount += ammoSurplus;
+    }
+
+    public void UpdateHealth(int unitsToRemove)
+    {
+        _health -= unitsToRemove;
+    }
+
+    public void UpdateHealth(int unitsToAdd, bool isHealing)
+    {
+        _health += unitsToAdd;
+    }
+
     private void Awake()
     {
         _rb ??= GetComponent<NetworkRigidbody2D>();
