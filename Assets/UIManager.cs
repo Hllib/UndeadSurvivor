@@ -8,8 +8,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _livesText;
     [SerializeField] private TextMeshProUGUI _ammoText;
 
-    private UIManager _instance;
-    public UIManager Instance
+    private static UIManager _instance;
+
+    public static UIManager Instance
     {
         get
         {
@@ -32,7 +33,7 @@ public class UIManager : MonoBehaviour
         _ammoText.text = ammoAmout.ToString();
     }
 
-    public void UpdateLives(int livesAmount)
+    public void UpdateHealth(int livesAmount)
     {
         _livesText.text = livesAmount.ToString();
     }
