@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class Skelet : Enemy, IDamageable
 {
-    public int Health { get; set; }
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private Transform _firePoint;
     EnemyScriptableObject currentAI; 
 
     public void Damage(int damage)
     {
-        Health -= damage;
-        if (Health <= 0)
+        health -= damage;
+        if (health <= 0)
         {
             Destroy(gameObject);
         }
@@ -23,7 +22,7 @@ public class Skelet : Enemy, IDamageable
         currentAI = enemyScriptableObject;
 
         speed = currentAI.speed;
-        Health = currentAI.health;
+        health = currentAI.health;
 
         attackRadius = currentAI.attackRadius;
         attackRate = currentAI.attackRate;
@@ -32,7 +31,8 @@ public class Skelet : Enemy, IDamageable
 
     protected override void Attack()
     {
-        Debug.Log("Skelet shooting");
+        Debug.Log("DEALING DAMAGE TO PLAYER");
+        player.Damage(currentAI.damage);
     }
 
     public override void CalculateMovement()

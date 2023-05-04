@@ -14,6 +14,7 @@ public abstract class Enemy : NetworkBehaviour
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
     protected NetworkPlayer player;
+    protected float health;
 
     protected bool isDead;
 
@@ -35,11 +36,25 @@ public abstract class Enemy : NetworkBehaviour
     {
         this.animator = GetComponent<Animator>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
-        var players = GameObject.FindGameObjectsWithTag("Player");
-        var index = UnityEngine.Random.Range(0, players.Length);
-        this.player = players.ElementAt(index).GetComponent<NetworkPlayer>();
+        FindPlayers();
+        this.player.OnPlayerDead += OnPlayerDead;
 
         SetInitialSettings();
+    }
+
+    private void OnPlayerDead(object sender, EventArgs e)
+    {
+        FindPlayers();
+    }
+
+    private void FindPlayers()
+    {
+        var players = GameObject.FindGameObjectsWithTag("Player");
+        if (players.Any())
+        {
+            var index = UnityEngine.Random.Range(0, players.Length);
+            this.player = players.ElementAt(index).GetComponent<NetworkPlayer>();
+        }
     }
 
     public override void Spawned()
