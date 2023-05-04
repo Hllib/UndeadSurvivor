@@ -16,7 +16,7 @@ MonoBehaviour:
   sprite: {fileID: 1772703093, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
   damage: 2
   canFireMultiple: 1
-  bulletSpeed: 0.75
+  bulletSpeed: 30
   shootStartPoints:
     X: 0.8
     Y: -0.156

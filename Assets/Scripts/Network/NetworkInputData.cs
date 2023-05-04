@@ -7,4 +7,5 @@ public struct NetworkInputData : INetworkInput
 {
     public Vector2 direction;
     public bool canShoot;
+    public bool canDropBomb;
 }
