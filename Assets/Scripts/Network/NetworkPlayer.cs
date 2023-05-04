@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Cinemachine;
+using TMPro;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
     private NetworkRigidbody2D _rb;
-    public static NetworkPlayer Local { get; set; }
     CinemachineVirtualCamera _camera;
-
-    [SerializeField] private Enemy _enemyPerfab;
+    private GameController _gameControlller;
+    [SerializeField] private GameObject _bulletPrefab;
 
     private void Awake()
     {
@@ -21,7 +21,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     {
         if (Object.HasInputAuthority)
         {
-            Local = this;
             _rb ??= GetComponent<NetworkRigidbody2D>();
             Debug.Log("Spawned own player");
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
@@ -30,6 +29,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         else
         {
             Debug.Log("Spawned another player");
+        }
+
+        if(Object.HasStateAuthority) 
+        {
+            _gameControlller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         }
     }
 
@@ -40,7 +44,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Runner.Despawn(Object);
         }
     }
-    bool hasSpawned = false;
+
+    private bool _hasGameStarted;
+
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
@@ -48,10 +54,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             _rb.Rigidbody.velocity = data.direction;
         }
 
-        if(Input.GetKey(KeyCode.R) && !hasSpawned && Object.HasStateAuthority)
+        if(Input.GetKey(KeyCode.R) && Object.HasStateAuthority && !_hasGameStarted)
         {
-            hasSpawned = true;
-            Runner.Spawn(_enemyPerfab, transform.position, Quaternion.identity);
+            _hasGameStarted = true;
+            _gameControlller.StartGame();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space) && Object.HasInputAuthority)
+        {
+            //Runner.Spawn();
         }
     }
 }
