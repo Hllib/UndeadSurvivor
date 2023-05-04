@@ -9,7 +9,7 @@ public class WeaponScriptableObject : ScriptableObject
 {
     public string title;
     public Sprite sprite;
-    public float damage;
+    public int damage;
     public bool canFireMultiple;
     public float bulletSpeed;
 

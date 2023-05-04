@@ -20,11 +20,11 @@ public class Zombie : Enemy, IDamageable
     protected override void Attack()
     {
         player.Damage(currentAI.damage);
-        Debug.Log("Damage amount: " + currentAI.damage);
     }
 
     public void Damage(int damage)
     {
+        Debug.Log("Taking damage");
         health -= damage;
         if(health <= 0)
         {
