@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Cinemachine;
-using TMPro;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
     private NetworkRigidbody2D _rb;
     CinemachineVirtualCamera _camera;
     private GameController _gameControlller;
-    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private Bullet _bulletPrefab;
+    private bool _hasGameStarted;
 
     private int _ammoAmount;
     private int _health;
@@ -65,7 +65,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Debug.Log("Spawned another player");
         }
 
-        if(Object.HasStateAuthority) 
+        if (Object.HasStateAuthority)
         {
             _gameControlller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         }
@@ -79,24 +79,28 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         }
     }
 
-    private bool _hasGameStarted;
+    [Rpc]
+    public void RPC_Shoot(RpcInfo info = default)
+    {
+        Runner.Spawn(_bulletPrefab, transform.position, Quaternion.identity, Object.InputAuthority);
+    }
 
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
         {
             _rb.Rigidbody.velocity = data.direction;
+            if (data.canShoot)
+            {
+                RPC_Shoot();
+                //Runner.Spawn(_bulletPrefab, transform.position, Quaternion.identity, Object.InputAuthority);
+            }
         }
 
-        if(Input.GetKey(KeyCode.R) && Object.HasStateAuthority && !_hasGameStarted)
+        if (Input.GetKey(KeyCode.R) && Object.HasStateAuthority && !_hasGameStarted)
         {
             _hasGameStarted = true;
             _gameControlller.StartGame();
-        }
-
-        if(Input.GetKeyDown(KeyCode.Space) && Object.HasInputAuthority)
-        {
-
         }
     }
 }

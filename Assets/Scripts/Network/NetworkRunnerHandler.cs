@@ -81,6 +81,9 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var inputData = _playerInputHandler.GetNetworkInput();
+
+        inputData.canShoot = Input.GetKeyDown(KeyCode.Space);
+
         input.Set(inputData);
     }
 
