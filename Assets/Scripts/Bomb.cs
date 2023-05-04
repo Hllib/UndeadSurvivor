@@ -8,7 +8,6 @@ public class Bomb : NetworkBehaviour
 {
     [SerializeField] private CircleCollider2D _circleCollider;
     private bool _canExplode;
-    //private bool _hasDamaged;
     private int _explosionDamage = 10;
 
     private void DealDamageAround()
@@ -27,7 +26,6 @@ public class Bomb : NetworkBehaviour
             {
                 Debug.Log(collision.name);
                 hit.Damage(_explosionDamage);
-                //_hasDamaged = true;
             }
         }
     }

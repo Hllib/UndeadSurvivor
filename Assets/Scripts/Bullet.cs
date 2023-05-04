@@ -52,6 +52,7 @@ public class Bullet : NetworkBehaviour
 
         if (damagedObject != null)
         {
+            StopAllCoroutines();
             damagedObject.Damage(_damage);
             Runner.Despawn(Object);
         }
