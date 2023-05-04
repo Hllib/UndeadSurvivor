@@ -136,6 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _bulletPrefab: {fileID: 0}
+  _weaponRenderer: {fileID: 1476512313751357091}
 --- !u!114 &4345359025208471851
 MonoBehaviour:
   m_ObjectHideFlags: 0

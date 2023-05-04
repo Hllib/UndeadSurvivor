@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameController : NetworkBehaviour
 {
     [SerializeField] private EnemySpawner _enemySpawner;
+    [SerializeField] private CollectablesSpawner _collectablesSpawner;
 
     enum SpawnWave
     {
@@ -17,5 +18,6 @@ public class GameController : NetworkBehaviour
     public void StartGame()
     {
         _enemySpawner.StartWave((int)SpawnWave.Wave1);
+        _collectablesSpawner.SpawnInitialWeapons();
     }
 }

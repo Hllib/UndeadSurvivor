@@ -14,6 +14,19 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     private int _ammoAmount;
     private int _health;
+    private WeaponScriptableObject _weaponSO;
+    [SerializeField] private SpriteRenderer _weaponRenderer;
+
+    [Rpc]
+    public void RPC_ShowWeapon(RpcInfo info = default)
+    {
+        _weaponRenderer.sprite = _weaponSO.sprite;
+    }
+
+    public void AssignWeapon(WeaponScriptableObject weaponSO)
+    {
+        _weaponSO = weaponSO;
+    }
 
     public void AddAmmo(int ammoSurplus)
     {
@@ -83,7 +96,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         if(Input.GetKeyDown(KeyCode.Space) && Object.HasInputAuthority)
         {
-            //Runner.Spawn();
+
         }
     }
 }
