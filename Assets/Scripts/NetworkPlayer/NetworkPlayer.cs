@@ -10,13 +10,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     private NetworkRigidbody2D _rb;
     CinemachineVirtualCamera _camera;
     private GameController _gameControlller;
-    private WeaponScriptableObject _weaponSO;
 
-    [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private Bomb _bombPrefab;
-    [SerializeField] private SpriteRenderer _weaponRenderer;
     [SerializeField] private NetworkPlayerAnimator _networkAnimator;
-    [SerializeField] private Transform _gunPoint;
+    [SerializeField] private PlayerWeaponHandler _weaponHandler;
 
     private bool _hasWeaponAssigned;
     private bool _hasGameStarted;
@@ -25,25 +22,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     private int _health;
     private int _ammoAmount = 15;
     private int _bombAmount;
-    private int _multipleShootAmount = 3;
-    [SerializeField] private float _speed = 25f;
-
-    [Rpc]
-    public void RPC_ShowWeapon(RpcInfo info = default)
-    {
-        _weaponRenderer.sprite = _weaponSO.sprite;
-    }
-
-    public void AssignWeapon(WeaponScriptableObject weaponSO)
-    {
-        _weaponSO = weaponSO;
-        _gunPoint.transform.localPosition = new Vector3(_weaponSO.shootStartPoints.X, _weaponSO.shootStartPoints.Y, 0);
-        _hasWeaponAssigned = true;
-    }
 
     public void AddBomb()
     {
         _bombAmount += 1;
+    }
+
+    private void AssignWeapon(object sender, EventArgs e)
+    {
+        _hasWeaponAssigned = true;
     }
 
     public void AddAmmo(int amountToAdd)
@@ -73,6 +60,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     private void Awake()
     {
         _rb ??= GetComponent<NetworkRigidbody2D>();
+        _weaponHandler.OnWeaponAssigned += AssignWeapon;
     }
 
     public override void Spawned()
@@ -100,53 +88,25 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     }
 
     [Rpc]
-    public void RPC_Shoot(RpcInfo info = default)
-    {
-        if (_ammoAmount > 0)
-        {
-            if (_weaponSO.canFireMultiple)
-            {
-                FireBullet(_multipleShootAmount);
-            }
-            else
-            {
-                FireBullet(1);
-            }
-            _ammoAmount -= 1;
-            UpdateAmmo(_ammoAmount);
-        }
-    }
-
-    [Rpc]
     public void RPC_DropBomb(RpcInfo info = default)
     {
         _bombAmount -= 1;
         Runner.Spawn(_bombPrefab, transform.position, Quaternion.identity, Object.InputAuthority);
     }
 
-
-    private void FireBullet(int bulletAmount)
-    {
-        for (int i = 0; i < bulletAmount; i++)
-        {
-            Vector3 startPosition = new Vector3(_gunPoint.transform.position.x + i, _gunPoint.transform.position.y + i, _gunPoint.transform.position.z);
-            var bullet = Runner.Spawn(_bulletPrefab, startPosition, Quaternion.identity, Object.InputAuthority);
-            bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage);
-        }
-    }
-
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
         {
-            transform.Translate(data.direction * _speed * Time.deltaTime);
-            //_rb.Rigidbody.velocity = data.direction;
+            _rb.Rigidbody.velocity = data.moveDirection;
             _networkAnimator.RPC_ChooseAnimation(data);
+            _weaponHandler.RPC_Aim(data);
             if (_hasWeaponAssigned)
             {
                 if (data.canShoot)
                 {
-                    RPC_Shoot();
+                    _weaponHandler.RPC_Shoot(_ammoAmount);
+                    UpdateAmmo(_ammoAmount);
                 }
             }
             if (data.canDropBomb && _bombAmount > 0)

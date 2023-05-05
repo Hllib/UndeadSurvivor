@@ -8,7 +8,7 @@ public class EnemySpawner : NetworkBehaviour
 {
     [SerializeField] private NetworkPrefabRef[] _enemies;
     [SerializeField] private GameObject[] _spawnPoints;
-    private float _spawnDelay = 2.5f;
+    private float _spawnDelay = 3.5f;
     public bool StopWave { get; set; }
 
     public enum EnemyType

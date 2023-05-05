@@ -33,12 +33,12 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     [Rpc]
     public void RPC_ChooseAnimation(NetworkInputData inputData)
     {
-        if (inputData.direction != Vector2.zero)
+        if (inputData.moveDirection != Vector2.zero)
         {
             CurrentState = PlayerStates.Walk;
-            _animator.SetFloat("xMove", inputData.direction.x);
-            _animator.SetFloat("yMove", inputData.direction.y);
-            FlipSpriteH(inputData.direction.x);
+            _animator.SetFloat("xMove", inputData.moveDirection.x);
+            _animator.SetFloat("yMove", inputData.moveDirection.y);
+            FlipSpriteH(inputData.moveDirection.x);
         }
         else
         {

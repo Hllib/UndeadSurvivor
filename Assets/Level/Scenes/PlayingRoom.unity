@@ -256,7 +256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6289aebf026f3ef4aa8a5e7d80d6e05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joystick: {fileID: 1686910574}
+  moveJoystick: {fileID: 1686910574}
+  shootJoystick: {fileID: 1376611983}
 --- !u!1 &190806559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,7 +1069,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Name
-      value: Fixed Joystick (1)
+      value: ShootingJoystick
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
@@ -1565,6 +1566,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1376611979 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 968050337}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1376611983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376611979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42844a4fccbd54746b90cade4ff70f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handleRange: 1
+  deadZone: 0
+  axisOptions: 0
+  snapX: 0
+  snapY: 0
+  background: {fileID: 968050338}
+  handle: {fileID: 1908603080}
+  moveThreshold: 1
+  joystickType: 0
 --- !u!1 &1508966182
 GameObject:
   m_ObjectHideFlags: 0
@@ -6738,6 +6765,11 @@ Transform:
   m_Father: {fileID: 1733379410}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &1908603080 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2929252285020697096, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 968050337}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1947816205
 GameObject:
   m_ObjectHideFlags: 0
