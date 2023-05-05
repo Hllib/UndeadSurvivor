@@ -15,7 +15,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [SerializeField] private NetworkPlayerAnimator _networkAnimator;
     [SerializeField] private PlayerWeaponHandler _weaponHandler;
 
-    private bool _hasWeaponAssigned;
     private bool _hasGameStarted;
 
     private int _initialHealth = 10;
@@ -28,15 +27,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         _bombAmount += 1;
     }
 
-    private void AssignWeapon(object sender, EventArgs e)
-    {
-        _hasWeaponAssigned = true;
-    }
-
     public void AddAmmo(int amountToAdd)
     {
         _ammoAmount += amountToAdd;
         UIManager.Instance.UpdateAmmo(_ammoAmount);
+    }
+
+    private void MinusAmmo(object sender, EventArgs e)
+    {
+        _ammoAmount -= 1;
     }
 
     public void UpdateAmmo(int ammoAmount)
@@ -60,7 +59,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     private void Awake()
     {
         _rb ??= GetComponent<NetworkRigidbody2D>();
-        _weaponHandler.OnWeaponAssigned += AssignWeapon;
+        _weaponHandler.OnShoot += MinusAmmo;
     }
 
     public override void Spawned()
@@ -101,14 +100,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             _rb.Rigidbody.velocity = data.moveDirection;
             _networkAnimator.RPC_ChooseAnimation(data);
             _weaponHandler.RPC_Aim(data);
-            if (_hasWeaponAssigned)
-            {
-                if (data.canShoot)
-                {
-                    _weaponHandler.RPC_Shoot(_ammoAmount);
-                    UpdateAmmo(_ammoAmount);
-                }
-            }
+
             if (data.canDropBomb && _bombAmount > 0)
             {
                 RPC_DropBomb();

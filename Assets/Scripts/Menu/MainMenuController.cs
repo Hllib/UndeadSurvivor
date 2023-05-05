@@ -10,7 +10,7 @@ public class MainMenuController : MonoBehaviour
 
     public void ConnectToRoom()
     {
-        SceneManager.LoadScene("Loading");
+        SceneManager.LoadScene("PlayingRoom");
     }
 
     public void ShowSkinPanel()

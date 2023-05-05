@@ -7,6 +7,7 @@ TagManager:
   - SpawnPoint
   - VCam
   - EnemySpawner
+  - CoverUI
   layers:
   - Default
   - TransparentFX

@@ -13,8 +13,9 @@ public class PlayerWeaponHandler : NetworkBehaviour
     [SerializeField] private Transform _gunPoint;
     private Transform _aimTransform;
     private int _multipleShootAmount = 3;
+    private bool _hasWeaponAssigned;
 
-    public event EventHandler OnWeaponAssigned;
+    public event EventHandler OnShoot;
 
     [Rpc]
     public void RPC_ShowWeapon(RpcInfo info = default)
@@ -26,7 +27,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
     {
         _weaponSO = weaponSO;
         _gunPoint.transform.localPosition = new Vector3(_weaponSO.shootStartPoints.X, _weaponSO.shootStartPoints.Y, 0);
-        OnWeaponAssigned?.Invoke(this, EventArgs.Empty);
+        _hasWeaponAssigned = true;
     }
 
     private void Awake()
@@ -37,38 +38,33 @@ public class PlayerWeaponHandler : NetworkBehaviour
     [Rpc]
     public void RPC_Aim(NetworkInputData inputData)
     {
-        Debug.Log("AIMING ");
         Vector2 shootDirection = inputData.shootDirection;
         float aimAngle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
         _aimTransform.eulerAngles = new Vector3(0, 0, aimAngle);
 
         Vector3 aimLocalScale = Vector3.one;
-        if (aimAngle > 90 || aimAngle < -90)
-        {
-            aimLocalScale.y = -1f;
-        }
-        else
-        {
-            aimLocalScale.y = +1f;
-        }
+        aimLocalScale.y = (aimAngle > 90 || aimAngle < -90) ? -1f : 1f;
         _aimTransform.localScale = aimLocalScale;
+
+        if (_weaponSO != null && inputData.canShoot)
+        {
+            RPC_Shoot();
+        }
+
     }
 
     [Rpc]
-    public void RPC_Shoot(int ammoAmount)
+    public void RPC_Shoot()
     {
-        if (ammoAmount > 0)
+        if (_weaponSO.canFireMultiple)
         {
-            if (_weaponSO.canFireMultiple)
-            {
-                FireBullet(_multipleShootAmount);
-            }
-            else
-            {
-                FireBullet(1);
-            }
-            ammoAmount -= 1;
+            FireBullet(_multipleShootAmount);
         }
+        else
+        {
+            FireBullet(1);
+        }
+        OnShoot?.Invoke(this, EventArgs.Empty);
     }
 
     private void FireBullet(int bulletAmount)
@@ -77,8 +73,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
         {
             Vector3 startPosition = new Vector3(_gunPoint.transform.position.x + i, _gunPoint.transform.position.y + i, _gunPoint.transform.position.z);
             var bullet = Runner.Spawn(_bulletPrefab, startPosition, Quaternion.identity, Object.InputAuthority);
-            bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage);
+            bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage, _gunPoint.transform.right);
         }
     }
-
 }

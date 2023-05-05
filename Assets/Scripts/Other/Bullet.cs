@@ -9,12 +9,13 @@ public class Bullet : NetworkBehaviour
     private int _damage;
     private float _speed;
     private bool _hasValuesAssigned;
+    private Vector3 _direction;
 
     public override void FixedUpdateNetwork()
     {
         if (_hasValuesAssigned)
         {
-            transform.Translate(Vector2.right * _speed * Time.deltaTime);
+            transform.Translate(_direction * _speed * Time.deltaTime);
         }
     }
 
@@ -25,7 +26,7 @@ public class Bullet : NetworkBehaviour
 
     IEnumerator DestroyBullet()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         Runner.Despawn(Object);
     }
 
@@ -39,10 +40,16 @@ public class Bullet : NetworkBehaviour
         _damage = damage;
     }
 
-    public void AssignData(float speed, int damage)
+    private void SetDirection(Vector3 direction)
+    {
+        _direction = direction;
+    }
+
+    public void AssignData(float speed, int damage, Vector3 direction)
     {
         SetSpeed(speed);
         SetDamage(damage);
+        SetDirection(direction);
         _hasValuesAssigned = true;
     }
 
