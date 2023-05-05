@@ -67,7 +67,6 @@ public class GameController : NetworkBehaviour
 
     private void StartRest()
     {
-        Debug.Log("Starting rest");
         _enemySpawner.StopSpawning();
         _gameState = GameState.Rest;
 
@@ -104,7 +103,6 @@ public class GameController : NetworkBehaviour
     {
         if (roundTime.Expired(Runner) && _gameStarted)
         {
-            Debug.Log("Timer expired!");
             switch (_gameState)
             {
                 case GameState.Rest: ChooseNextRound(); break;
@@ -116,7 +114,6 @@ public class GameController : NetworkBehaviour
     private void SetWaveAsCompleted()
     {
         waveCompletion[_currentWaveId] = true;
-        Debug.Log("Finished wave: " + _currentWaveId);
     }
 
     public void ChooseNextRound()
@@ -126,7 +123,6 @@ public class GameController : NetworkBehaviour
         {
             var indexOfWave = nextWave.Key;
             StartRound((SpawnWave)Enum.ToObject(typeof(SpawnWave), indexOfWave));
-            Debug.Log("Choosing next round: " + indexOfWave);
         }
         else
         {

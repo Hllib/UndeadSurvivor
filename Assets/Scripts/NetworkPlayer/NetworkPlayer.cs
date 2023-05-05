@@ -15,8 +15,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [SerializeField] private NetworkPlayerAnimator _networkAnimator;
     [SerializeField] private PlayerWeaponHandler _weaponHandler;
 
-    private bool _hasGameStarted;
-
     private int _initialHealth = 10;
     private int _health;
     private int _ammoAmount = 15;
@@ -122,7 +120,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     private void Die()
     {
-        OnPlayerDead?.Invoke(this, EventArgs.Empty);
-        //Runner.Despawn(Object);
+        Runner.Despawn(Object);
+        //OnPlayerDead?.Invoke(this, EventArgs.Empty);
     }
 }
