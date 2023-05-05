@@ -5,19 +5,20 @@ using UnityEngine;
 
 public class NetworkInputHandler : MonoBehaviour
 {
-    private float _speed = 5.0f;
-    //public delegate void MovementSender(float hor, float ver);
-    //public event MovementSender onPlayerInput;
+    private float _speed = 25.0f;
+    public VariableJoystick joystick;
 
     public NetworkInputData GetNetworkInput()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        NetworkInputData data = new NetworkInputData();
+        data.direction = Vector2.up * joystick.Vertical + Vector2.right * joystick.Horizontal;
+        Debug.Log("Data direction: " + data.direction);
 
-        NetworkInputData networkInputData = new NetworkInputData();
-        networkInputData.direction = new Vector2(horizontalInput * _speed, verticalInput * _speed);
-        //onPlayerInput?.Invoke(horizontalInput, verticalInput);
-
-        return networkInputData;
+        return data;
+        //float horizontalInput = Input.GetAxisRaw("Horizontal");
+        //float verticalInput = Input.GetAxisRaw("Vertical");
+        //NetworkInputData networkInputData = new NetworkInputData();
+        //networkInputData.direction = new Vector2(horizontalInput * _speed, verticalInput * _speed);
+        //return networkInputData;
     }
 }

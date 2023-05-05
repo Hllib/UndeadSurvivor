@@ -125,11 +125,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4345359025208471850}
   - component: {fileID: 4345359025208471860}
+  - component: {fileID: 5287842833491222230}
   - component: {fileID: 4345359025208471851}
   - component: {fileID: 4345359025208471862}
   - component: {fileID: 4345359025208471861}
   - component: {fileID: -8302148626029300335}
-  - component: {fileID: 5287842833491222230}
   m_Layer: 6
   m_Name: NetworkPlayer
   m_TagString: Player
@@ -171,6 +171,22 @@ MonoBehaviour:
   _weaponRenderer: {fileID: 1476512313751357091}
   _networkAnimator: {fileID: 5287842833491222230}
   _gunPoint: {fileID: 4140331993082600788}
+  _speed: 10
+--- !u!114 &5287842833491222230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345359025208471849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f99f85b9f52744dba36308717881fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _animator: {fileID: 8932275380019274195}
+  _spriteRenderer: {fileID: 4345359025217182146}
 --- !u!114 &4345359025208471851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,8 +210,8 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 4345359025208471860}
-  - {fileID: 4345359025208471861}
   - {fileID: 5287842833491222230}
+  - {fileID: 4345359025208471861}
   SimulationBehaviours: []
 --- !u!50 &4345359025208471862
 Rigidbody2D:
@@ -272,21 +288,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5287842833491222230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4345359025208471849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9f99f85b9f52744dba36308717881fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  _animator: {fileID: 8932275380019274195}
-  _spriteRenderer: {fileID: 4345359025217182146}
 --- !u!1 &4345359025217182144
 GameObject:
   m_ObjectHideFlags: 0

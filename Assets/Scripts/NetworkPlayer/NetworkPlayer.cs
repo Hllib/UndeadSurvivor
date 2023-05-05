@@ -26,6 +26,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     private int _ammoAmount = 15;
     private int _bombAmount;
     private int _multipleShootAmount = 3;
+    [SerializeField] private float _speed = 25f;
 
     [Rpc]
     public void RPC_ShowWeapon(RpcInfo info = default)
@@ -138,7 +139,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     {
         if (GetInput(out NetworkInputData data))
         {
-            _rb.Rigidbody.velocity = data.direction;
+            transform.Translate(data.direction * _speed * Time.deltaTime);
+            //_rb.Rigidbody.velocity = data.direction;
             _networkAnimator.RPC_ChooseAnimation(data);
             if (_hasWeaponAssigned)
             {
