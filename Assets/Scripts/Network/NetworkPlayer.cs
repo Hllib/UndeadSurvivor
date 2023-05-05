@@ -10,19 +10,20 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     private NetworkRigidbody2D _rb;
     CinemachineVirtualCamera _camera;
     private GameController _gameControlller;
+    private WeaponScriptableObject _weaponSO;
+
     [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private Bomb _bombPrefab;
-    private bool _hasGameStarted;
-    private int _initialHealth = 10;
-
-    private int _ammoAmount;
-    private int _health;
-    private WeaponScriptableObject _weaponSO;
     [SerializeField] private SpriteRenderer _weaponRenderer;
-    private bool _hasWeaponAssigned;
-
+    [SerializeField] private NetworkPlayerAnimator _networkAnimator;
     [SerializeField] private Transform _gunPoint;
 
+    private bool _hasWeaponAssigned;
+    private bool _hasGameStarted;
+
+    private int _initialHealth = 10;
+    private int _health;
+    private int _ammoAmount;
     private int _bombAmount;
 
     [Rpc]
@@ -127,6 +128,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         if (GetInput(out NetworkInputData data))
         {
             _rb.Rigidbody.velocity = data.direction;
+            _networkAnimator.RPC_ChooseAnimation(data);
             if (_hasWeaponAssigned)
             {
                 if (data.canShoot)
