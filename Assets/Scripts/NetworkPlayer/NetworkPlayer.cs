@@ -106,12 +106,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
                 RPC_DropBomb();
             }
         }
-
-        if (Input.GetKey(KeyCode.R) && Object.HasStateAuthority && !_hasGameStarted)
-        {
-            _hasGameStarted = true;
-            _gameControlller.StartGame();
-        }
     }
 
     public void Damage(int damage)

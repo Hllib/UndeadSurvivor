@@ -13,7 +13,6 @@ public class PlayerWeaponHandler : NetworkBehaviour
     [SerializeField] private Transform _gunPoint;
     private Transform _aimTransform;
     private int _multipleShootAmount = 3;
-    private bool _hasWeaponAssigned;
 
     public event EventHandler OnShoot;
 
@@ -27,7 +26,6 @@ public class PlayerWeaponHandler : NetworkBehaviour
     {
         _weaponSO = weaponSO;
         _gunPoint.transform.localPosition = new Vector3(_weaponSO.shootStartPoints.X, _weaponSO.shootStartPoints.Y, 0);
-        _hasWeaponAssigned = true;
     }
 
     private void Awake()
@@ -50,7 +48,6 @@ public class PlayerWeaponHandler : NetworkBehaviour
         {
             RPC_Shoot();
         }
-
     }
 
     [Rpc]
