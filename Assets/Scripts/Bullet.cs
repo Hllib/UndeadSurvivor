@@ -25,7 +25,7 @@ public class Bullet : NetworkBehaviour
 
     IEnumerator DestroyBullet()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(5f);
         Runner.Despawn(Object);
     }
 

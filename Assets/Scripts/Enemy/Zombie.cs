@@ -24,7 +24,6 @@ public class Zombie : Enemy, IDamageable
 
     public void Damage(int damage)
     {
-        Debug.Log("Taking damage");
         health -= damage;
         if(health <= 0)
         {

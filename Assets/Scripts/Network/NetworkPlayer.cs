@@ -72,7 +72,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         if (Object.HasInputAuthority)
         {
             _rb ??= GetComponent<NetworkRigidbody2D>();
-            Debug.Log("Spawned own player");
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
             _health = _initialHealth;

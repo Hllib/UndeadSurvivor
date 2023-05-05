@@ -9,13 +9,16 @@ public class GameController : NetworkBehaviour
 {
     [SerializeField] private EnemySpawner _enemySpawner;
     [SerializeField] private CollectablesSpawner _collectablesSpawner;
+    [SerializeField] private WaveScriptableObject _waveSettingSO;
 
     [Networked] public TickTimer roundTime { get; set; }
     private List<float> _roundTime;
-    private float _restTime = 30f;
+    private float _restTime;
 
     private Dictionary<int, bool> waveCompletion;
     private GameState _gameState;
+    private bool _gameStarted;
+    private int _currentWaveId;
 
     enum GameState
     {
@@ -41,16 +44,20 @@ public class GameController : NetworkBehaviour
 
         _roundTime = new List<float>()
         {
-            60f,
-            180f,
-            300f
+            _waveSettingSO.wave1Duration,
+            _waveSettingSO.wave2Duration,
+            _waveSettingSO.wave3Duration
         };
+
+        _restTime = _waveSettingSO.restTime;
+        _gameStarted = false;
     }
 
     public void StartGame()
     {
-        StartRound(SpawnWave.Wave1);
+        ChooseNextRound();
         _collectablesSpawner.SpawnInitialWeapons();
+        _gameStarted = true;
     }
 
     public void SetTimer(float seconds)
@@ -60,6 +67,7 @@ public class GameController : NetworkBehaviour
 
     private void StartRest()
     {
+        Debug.Log("Starting rest");
         _enemySpawner.StopSpawning();
         _gameState = GameState.Rest;
 
@@ -69,35 +77,53 @@ public class GameController : NetworkBehaviour
     private void StartRound(SpawnWave spawnWave)
     {
         _gameState = GameState.Round;
-
         switch (spawnWave)
         {
-            case SpawnWave.Wave1: _enemySpawner.StartWave((int)SpawnWave.Wave1); SetTimer(_roundTime[0]); break;
-            case SpawnWave.Wave2: _enemySpawner.StartWave((int)SpawnWave.Wave2); SetTimer(_roundTime[1]); break;
-            case SpawnWave.Wave3: _enemySpawner.StartWave((int)SpawnWave.Wave3); SetTimer(_roundTime[2]); break;
+            case SpawnWave.Wave1:
+                _enemySpawner.StartWave((int)SpawnWave.Wave1);
+                SetTimer(_roundTime[0]);
+                _currentWaveId = (int)SpawnWave.Wave1;
+                break;
+            case SpawnWave.Wave2: 
+                _enemySpawner.StartWave((int)SpawnWave.Wave2); 
+                SetTimer(_roundTime[1]);
+                _currentWaveId = (int)SpawnWave.Wave2; 
+                break;
+            case SpawnWave.Wave3: 
+                _enemySpawner.StartWave((int)SpawnWave.Wave3); 
+                SetTimer(_roundTime[2]);
+                _currentWaveId = (int)SpawnWave.Wave3;
+                break;
         }
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (roundTime.Expired(Runner))
+        if (roundTime.Expired(Runner) && _gameStarted)
         {
+            Debug.Log("Timer expired!");
             switch (_gameState)
             {
-                case GameState.Round: ChooseNextRound(); break;
-                case GameState.Rest: StartRest(); break;
+                case GameState.Rest: ChooseNextRound(); break;
+                case GameState.Round: StartRest(); SetWaveAsCompleted(); break;
             }
         }
-        Debug.Log(roundTime.ToString());
+    }
+
+    private void SetWaveAsCompleted()
+    {
+        waveCompletion[_currentWaveId] = true;
+        Debug.Log("Finished wave: " + _currentWaveId);
     }
 
     public void ChooseNextRound()
     {
         var nextWave = waveCompletion.FirstOrDefault(wave => wave.Value == false);
-        if(nextWave.Key != null)
+        if (nextWave.Key != default(int))
         {
             var indexOfWave = nextWave.Key;
             StartRound((SpawnWave)Enum.ToObject(typeof(SpawnWave), indexOfWave));
+            Debug.Log("Choosing next round: " + indexOfWave);
         }
         else
         {

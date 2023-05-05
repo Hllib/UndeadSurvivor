@@ -6406,6 +6406,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _enemySpawner: {fileID: 1508966184}
   _collectablesSpawner: {fileID: 2058400522}
+  _waveSettingSO: {fileID: 11400000, guid: 8f021147965f67542ba71d49d04f038e, type: 2}
 --- !u!114 &2055805516
 MonoBehaviour:
   m_ObjectHideFlags: 0

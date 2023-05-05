@@ -18,4 +18,10 @@ public class CollectablesSpawner : NetworkBehaviour
             index++;
         }
     }
+
+
+    public void SpawnCollectables()
+    {
+
+    }
 }

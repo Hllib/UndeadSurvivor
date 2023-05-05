@@ -48,11 +48,11 @@ public class NetworkPlayerAnimator : NetworkBehaviour
 
     private void FlipSpriteH(float horizontalMove)
     {
-        if (horizontalMove > 0) // moves right
+        if (horizontalMove > 0) 
         {
             _spriteRenderer.flipX = false;
         }
-        if (horizontalMove < 0) // moves left
+        if (horizontalMove < 0) 
         {
             _spriteRenderer.flipX = true;
         }
