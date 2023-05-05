@@ -81,16 +81,19 @@ public class GameController : NetworkBehaviour
         {
             case SpawnWave.Wave1:
                 _enemySpawner.StartWave((int)SpawnWave.Wave1);
+                _collectablesSpawner.StartWave((int)SpawnWave.Wave1);
                 SetTimer(_roundTime[0]);
                 _currentWaveId = (int)SpawnWave.Wave1;
                 break;
             case SpawnWave.Wave2: 
                 _enemySpawner.StartWave((int)SpawnWave.Wave2); 
+                _collectablesSpawner.StartWave((int)SpawnWave.Wave2); 
                 SetTimer(_roundTime[1]);
                 _currentWaveId = (int)SpawnWave.Wave2; 
                 break;
             case SpawnWave.Wave3: 
                 _enemySpawner.StartWave((int)SpawnWave.Wave3); 
+                _collectablesSpawner.StartWave((int)SpawnWave.Wave3); 
                 SetTimer(_roundTime[2]);
                 _currentWaveId = (int)SpawnWave.Wave3;
                 break;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AmmoBox : NetworkBehaviour
 {
-    private int _ammoInBox = 15;
+    private int _ammoInBox = 25;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

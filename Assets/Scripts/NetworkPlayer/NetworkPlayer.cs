@@ -23,8 +23,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     private int _initialHealth = 10;
     private int _health;
-    private int _ammoAmount;
+    private int _ammoAmount = 15;
     private int _bombAmount;
+    private int _multipleShootAmount = 3;
 
     [Rpc]
     public void RPC_ShowWeapon(RpcInfo info = default)
@@ -44,9 +45,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         _bombAmount += 1;
     }
 
-    public void AddAmmo(int ammoSurplus)
+    public void AddAmmo(int amountToAdd)
     {
-        _ammoAmount += ammoSurplus;
+        _ammoAmount += amountToAdd;
+        UIManager.Instance.UpdateAmmo(_ammoAmount);
+    }
+
+    public void UpdateAmmo(int ammoAmount)
+    {
+        _ammoAmount = ammoAmount;
         UIManager.Instance.UpdateAmmo(_ammoAmount);
     }
 
@@ -94,13 +101,18 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [Rpc]
     public void RPC_Shoot(RpcInfo info = default)
     {
-        if (_weaponSO.canFireMultiple)
+        if (_ammoAmount > 0)
         {
-            FireBullet(3);
-        }
-        else
-        {
-            FireBullet(1);
+            if (_weaponSO.canFireMultiple)
+            {
+                FireBullet(_multipleShootAmount);
+            }
+            else
+            {
+                FireBullet(1);
+            }
+            _ammoAmount -= 1;
+            UpdateAmmo(_ammoAmount);
         }
     }
 
