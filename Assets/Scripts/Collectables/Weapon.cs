@@ -12,22 +12,10 @@ public class Weapon : NetworkBehaviour
         var player = collision.gameObject.GetComponent<NetworkPlayer>();
         if (player != null)
         {
-            Debug.Log("ADDED WEAPON");
-            player.AssignWeapon(_weaponSO);
-            player.RPC_ShowWeapon();
+            var weaponHandler = player.GetComponentInChildren<PlayerWeaponHandler>();
+            weaponHandler.AssignWeapon(_weaponSO);
+            weaponHandler.RPC_ShowWeapon();
             Runner.Despawn(Object);
         }
     }
-
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    var player = collision.gameObject.GetComponent<NetworkPlayer>();
-    //    if (player != null)
-    //    {
-    //        Debug.Log("ADDED WEAPON");
-    //        player.AssignWeapon(_weaponSO);
-    //        player.RPC_ShowWeapon();
-    //        Runner.Despawn(Object);
-    //    }
-    //}
 }

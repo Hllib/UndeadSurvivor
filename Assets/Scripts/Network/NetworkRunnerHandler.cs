@@ -14,10 +14,18 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkInputHandler _playerInputHandler;
     [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    [SerializeField] private GameObject _coverUI;
 
     private void Start()
+    { 
+        StartCoroutine(LoadGame());
+    }
+
+    IEnumerator LoadGame()
     {
-        InitializeNetworkRunner(_networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
+        var task = InitializeNetworkRunner(_networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
+        yield return new WaitUntil(() => task.IsCompleted);
+        _coverUI.SetActive(false);
     }
 
     private void Awake()
@@ -81,9 +89,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var inputData = _playerInputHandler.GetNetworkInput();
-
-        inputData.canShoot = Input.GetKeyDown(KeyCode.Space);
-        inputData.canDropBomb = Input.GetKeyDown(KeyCode.F);
+        inputData.canShoot = (inputData.shootDirection.x != 0 || inputData.shootDirection.y != 0) ? true : false;
 
         input.Set(inputData);
     }

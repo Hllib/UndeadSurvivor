@@ -31,8 +31,7 @@ public class Skelet : Enemy, IDamageable
 
     protected override void Attack()
     {
-        Debug.Log("DEALING DAMAGE TO PLAYER");
-        player.Damage(currentAI.damage);
+        //player.Damage(currentAI.damage);
     }
 
     public override void CalculateMovement()
