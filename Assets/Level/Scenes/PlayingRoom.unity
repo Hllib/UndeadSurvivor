@@ -2702,7 +2702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1769307435
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2859,7 +2859,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 30 sec
+  m_text: '00 : 00'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7761,6 +7761,9 @@ MonoBehaviour:
   _enemySpawner: {fileID: 1508966184}
   _collectablesSpawner: {fileID: 2058400522}
   _waveSettingSO: {fileID: 11400000, guid: 8f021147965f67542ba71d49d04f038e, type: 2}
+  timeLeft: 60
+  isTimerOn: 0
+  timerText: {fileID: 1806785950}
 --- !u!114 &2055805516
 MonoBehaviour:
   m_ObjectHideFlags: 0

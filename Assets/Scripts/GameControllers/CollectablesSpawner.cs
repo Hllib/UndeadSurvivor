@@ -11,7 +11,7 @@ public class CollectablesSpawner : NetworkBehaviour
     [SerializeField] private GameObject[] _spawnPoints;
     [SerializeField] private NetworkPrefabRef[] _collectables;
     public bool StopWave { get; set; }
-    private float _spawnDelay = 3f;
+    private float _spawnDelay = 5f;
 
     public void SpawnInitialWeapons()
     {

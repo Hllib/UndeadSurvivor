@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: WaveSettings
   m_EditorClassIdentifier: 
   wave1Duration: 60
-  wave2Duration: 180
-  wave3Duration: 300
+  wave2Duration: 90
+  wave3Duration: 180
   restTime: 30
