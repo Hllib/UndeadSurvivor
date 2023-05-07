@@ -19,7 +19,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     public int damageDone;
     public int enemiesKilled;
-    private int _bombAmount;
+    public int bombAmount;
     public string playerName;
 
     public delegate void HealthSender(int healthAmount);
@@ -27,7 +27,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     public void AddBomb()
     {
-        _bombAmount += 1;
+        bombAmount += 1;
     }
 
     public void UpdateScore(int damageDoneSurplus, int enemiesKilledSurplus)
@@ -59,7 +59,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
             Health = _initialHealth;
-            UIManager.Instance.UpdateHealth(Health);
             string name = Object.HasStateAuthority ? "Host" : "Client";
             RPC_UpdateName(name);
         }
@@ -82,7 +81,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [Rpc]
     public void RPC_DropBomb(RpcInfo info = default)
     {
-        _bombAmount -= 1;
+        bombAmount -= 1;
         Runner.Spawn(_bombPrefab, transform.position, Quaternion.identity, Object.InputAuthority);
     }
 
@@ -93,11 +92,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             _rb.Rigidbody.velocity = data.moveDirection;
             _networkAnimator.RPC_ChooseAnimation(data);
             _weaponHandler.RPC_Aim(data);
-
-            if (data.canDropBomb && _bombAmount > 0)
-            {
-                RPC_DropBomb();
-            }
         }
     }
 
@@ -106,7 +100,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         UpdateHealth(damage, false);
         if (Health <= 0)
         {
-            UIManager.Instance.UpdateHealth(Health);
             Die();
         }
     }

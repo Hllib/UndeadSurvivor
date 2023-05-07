@@ -9,11 +9,12 @@ public class Bomb : NetworkBehaviour
     [SerializeField] private CircleCollider2D _circleCollider;
     private bool _canExplode;
     private int _explosionDamage = 10;
+    private int _colliderScaleFactor = 25;
 
     private void DealDamageAround()
     {
         _canExplode = true;
-        _circleCollider.radius *= 7;
+        _circleCollider.radius *= _colliderScaleFactor;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
