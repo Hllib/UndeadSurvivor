@@ -1,7 +1,5 @@
 using Fusion;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -11,13 +9,19 @@ public class LeaderBoard : NetworkBehaviour
     public TextMeshProUGUI statsTMP;
     private GameController _gameController;
     [SerializeField] private NetworkRunnerHandler _runnerHandler;
-    [SerializeField] private GameObject _leaderBoard;
-    private string _stats;
+    [SerializeField] private GameObject _leaderBoardPanel;
+
+    //[Networked(OnChanged = nameof(OnStatsSet))]
+    public string statistics { get; set; }
 
     private void Awake()
     {
         _gameController = GetComponent<GameController>();
+        _gameController.OnGameFinished += CreateLeaderBoard;
+    }
 
+    private string GetStats()
+    {
         StringBuilder stringBuilder = new StringBuilder();
         foreach (var keyValuePairPlayer in _runnerHandler.spawnedCharacters)
         {
@@ -25,40 +29,40 @@ public class LeaderBoard : NetworkBehaviour
             string playerStat = string.Format("Player name: {0}\n Kills: {1}\n Damage: {2}\n", player.playerName, player.enemiesKilled, player.damageDone);
             stringBuilder.AppendLine(playerStat);
             stringBuilder.AppendLine("**************************");
-        }
-        _stats = stringBuilder.ToString();
+        } 
+        return stringBuilder.ToString();
+    }
 
-        _gameController.OnGameFinished += CreateLeaderBoard;
+    [Rpc]
+    private void RPC_UpdateStats(string stats, RpcInfo info = default)
+    {
+        statistics = stats;
+        _leaderBoardPanel.SetActive(true);
+        RPC_UpdateStatTMP(stats);
+    }
+
+    [Rpc]
+    private void RPC_UpdateStatTMP(string stats, RpcInfo info = default)
+    {
+        statsTMP.text = stats;
+    }
+
+    public static void OnStatsSet(Changed<LeaderBoard> changed)
+    {
+        var leaderBoard = changed.Behaviour;
+        leaderBoard.statsTMP.text = leaderBoard.statistics;
+        leaderBoard._leaderBoardPanel.SetActive(true);
     }
 
     public void CreateLeaderBoard(object sender, EventArgs e)
     {
-        RPC_UpdateLeaderBoardText();
-        RPC_ShowLeaderBoard();
-    }
-
-    [Rpc]
-    private void RPC_UpdateLeaderBoardText()
-    {
-        statsTMP.text = _stats;
-    }
-
-    [Rpc]
-    private void RPC_ShowLeaderBoard()
-    {
-        _leaderBoard.SetActive(true);   
-    }
-
-    [Rpc]
-    public void RPC_CeateStats()
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        foreach(var keyValuePairPlayer in _runnerHandler.spawnedCharacters)
+        if (Object.HasStateAuthority)
         {
-            var player = keyValuePairPlayer.Value.GetComponent<NetworkPlayer>();
-            string playerStat = string.Format("Player name: {0}\n Kills: {1}\n Damage: {2}\n", player.playerName, player.enemiesKilled, player.damageDone);
-            stringBuilder.AppendLine(playerStat);    
-            stringBuilder.AppendLine("**************************");
+            if(Object.HasStateAuthority)
+            {
+                string stat = GetStats();
+                RPC_UpdateStats(stat);
+            }
         }
     }
 }

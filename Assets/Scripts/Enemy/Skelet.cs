@@ -42,9 +42,12 @@ public class Skelet : Enemy, IDamageable
 
         if(Time.time > canShoot)
         {
-            var bullet = Runner.Spawn(_bulletPrefab, _firePoint.transform.position, Quaternion.identity);
-            bullet.GetComponent<SkeletBullet>().AssignData(currentAI.damage, _firePoint.transform.right);
-            canShoot = Time.time + shootRate;
+            if(Object.HasStateAuthority)
+            {
+                var bullet = Runner.Spawn(_bulletPrefab, _firePoint.transform.position, Quaternion.identity);
+                bullet.GetComponent<SkeletBullet>().AssignData(currentAI.damage, _firePoint.transform.right);
+                canShoot = Time.time + shootRate;
+            }
         }
     }
 

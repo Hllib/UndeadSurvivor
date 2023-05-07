@@ -6,7 +6,7 @@ using System;
 
 public class CollectablesSpawner : NetworkBehaviour
 {
-    [SerializeField] private Weapon[] _initialWeapons;
+    [SerializeField] private NetworkPrefabRef[] _initialWeapons;
     [SerializeField] private GameObject[] _weaponSpawnPoints;
     [SerializeField] private GameObject[] _spawnPoints;
     [SerializeField] private NetworkPrefabRef[] _collectables;

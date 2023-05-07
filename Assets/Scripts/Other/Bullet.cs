@@ -68,16 +68,19 @@ public class Bullet : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var damagedObject = collision.GetComponent<IDamageable>();
-
-        if (damagedObject != null)
+        if (_hasValuesAssigned)
         {
-            StopAllCoroutines();
-            UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
-            damagedObject.Damage(_damage);
-            if (Object != null)
+            var damagedObject = collision.GetComponent<IDamageable>();
+
+            if (damagedObject != null)
             {
-                Runner.Despawn(Object);
+                StopAllCoroutines();
+                UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
+                damagedObject.Damage(_damage);
+                if (Object != null)
+                {
+                    Runner.Despawn(Object);
+                }
             }
         }
     }

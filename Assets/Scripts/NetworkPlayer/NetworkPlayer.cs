@@ -19,12 +19,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     public int damageDone;
     public int enemiesKilled;
-    private int _bombAmount;
+    public int bombAmount;
     public string playerName;
+
+    public delegate void HealthSender(int healthAmount);
+    public event HealthSender OnHealthChanged;
 
     public void AddBomb()
     {
-        _bombAmount += 1;
+        bombAmount += 1;
     }
 
     public void UpdateScore(int damageDoneSurplus, int enemiesKilledSurplus)
@@ -33,33 +36,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         enemiesKilled += enemiesKilledSurplus;
     }
 
-    //public void AddAmmo(int amountToAdd)
-    //{
-    //    _ammoAmount += amountToAdd;
-    //    UIManager.Instance.UpdateAmmo(_ammoAmount);
-    //}
-
-    //private void MinusAmmo(object sender, EventArgs e)
-    //{
-    //    _ammoAmount -= 1;
-    //}
-
-    //public void UpdateAmmo(int ammoAmount)
-    //{
-    //    _ammoAmount = ammoAmount;
-    //    UIManager.Instance.UpdateAmmo(_ammoAmount);
-    //}
-
-    public void UpdateHealth(int unitsToRemove)
+    public void UpdateHealth(int healthSurplus, bool toAdd)
     {
-        Health -= unitsToRemove;
-        UIManager.Instance.UpdateHealth(Health);
-    }
-
-    public void UpdateHealth(int unitsToAdd, bool isHealing)
-    {
-        Health += unitsToAdd;
-        UIManager.Instance.UpdateHealth(Health);
+        switch (toAdd)
+        {
+            case true: Health += healthSurplus; break;
+            default: Health -= healthSurplus; break;
+        }
+        OnHealthChanged?.Invoke(Health);
     }
 
     private void Awake()
@@ -75,9 +59,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
             Health = _initialHealth;
-            UIManager.Instance.UpdateHealth(Health);
-            playerName = Object.HasStateAuthority ? "Host" : "Client";
+            string name = Object.HasStateAuthority ? "Host" : "Client";
+            RPC_UpdateName(name);
         }
+    }
+
+    [Rpc]
+    private void RPC_UpdateName(string name, RpcInfo info = default)
+    {
+        playerName = name;
     }
 
     public void PlayerLeft(PlayerRef player)
@@ -91,7 +81,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [Rpc]
     public void RPC_DropBomb(RpcInfo info = default)
     {
-        _bombAmount -= 1;
+        bombAmount -= 1;
         Runner.Spawn(_bombPrefab, transform.position, Quaternion.identity, Object.InputAuthority);
     }
 
@@ -102,20 +92,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             _rb.Rigidbody.velocity = data.moveDirection;
             _networkAnimator.RPC_ChooseAnimation(data);
             _weaponHandler.RPC_Aim(data);
-
-            if (data.canDropBomb && _bombAmount > 0)
-            {
-                RPC_DropBomb();
-            }
         }
     }
 
     public void Damage(int damage)
     {
-        UpdateHealth(damage);
+        UpdateHealth(damage, false);
         if (Health <= 0)
         {
-            UIManager.Instance.UpdateHealth(Health);
             Die();
         }
     }

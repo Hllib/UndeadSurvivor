@@ -40,7 +40,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3155338149631607418}
-  - component: {fileID: 1723849602038175587}
   m_Layer: 6
   m_Name: Aim
   m_TagString: Untagged
@@ -65,22 +64,6 @@ Transform:
   m_Father: {fileID: 303936157353903209}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1723849602038175587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2737588584941816562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 538d6578f1c973246a3f254c87719f2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  _weaponSpriteRenderer: {fileID: 2459671057236939765}
-  _bulletPrefab: {fileID: 1667211528, guid: 15e83e6c0e652e540a194e2cec051442, type: 3}
-  _gunPoint: {fileID: 7909079801247277338}
 --- !u!1 &4345359025208471849
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,10 +75,12 @@ GameObject:
   - component: {fileID: 4345359025208471850}
   - component: {fileID: 4345359025208471860}
   - component: {fileID: 1524337022835620390}
+  - component: {fileID: 7453034430816014867}
   - component: {fileID: 4345359025208471851}
   - component: {fileID: 4345359025208471862}
   - component: {fileID: 4345359025208471861}
   - component: {fileID: 8511071021344971490}
+  - component: {fileID: 4012531234468979544}
   m_Layer: 6
   m_Name: NetworkPlayer3
   m_TagString: Player
@@ -134,7 +119,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _bombPrefab: {fileID: 396455281878363753, guid: be600dd4086c24d4db53de1f3d7cb3e2, type: 3}
   _networkAnimator: {fileID: 1524337022835620390}
-  _weaponHandler: {fileID: 1723849602038175587}
+  _weaponHandler: {fileID: 7453034430816014867}
   damageDone: 0
   enemiesKilled: 0
   playerName: 
@@ -153,6 +138,23 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _animator: {fileID: 8295174612721694646}
   _spriteRenderer: {fileID: 3348450028309570775}
+--- !u!114 &7453034430816014867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345359025208471849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 538d6578f1c973246a3f254c87719f2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _weaponSpriteRenderer: {fileID: 2459671057236939765}
+  _bulletPrefab: {fileID: 1667211528, guid: 15e83e6c0e652e540a194e2cec051442, type: 3}
+  _gunPoint: {fileID: 7909079801247277338}
+  _aimTransform: {fileID: 3155338149631607418}
 --- !u!114 &4345359025208471851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,8 +179,9 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 4345359025208471860}
   - {fileID: 1524337022835620390}
+  - {fileID: 7453034430816014867}
   - {fileID: 4345359025208471861}
-  - {fileID: 1723849602038175587}
+  - {fileID: 4012531234468979544}
   SimulationBehaviours: []
 --- !u!50 &4345359025208471862
 Rigidbody2D:
@@ -255,6 +258,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4012531234468979544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345359025208471849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e12a474fc279d345a37811a92e7d216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
 --- !u!1 &7813561420440769192
 GameObject:
   m_ObjectHideFlags: 0

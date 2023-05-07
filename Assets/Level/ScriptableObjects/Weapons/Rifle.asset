@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b42038cd96482c408aa7a5ec9364fdf, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
-  title: SmallShotgun
+  title: Rifle
   sprite: {fileID: -144335857, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
   damage: 3
   canFireMultiple: 0

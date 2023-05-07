@@ -59,15 +59,13 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            var skinId = SkinButton.skinId;
-            Debug.Log("SKIN ID: " + skinId);
+            var skinId = PlayerPrefs.GetInt("Skin");
             NetworkObject networkPlayerObject;
             switch (skinId)
             {
                 case 1: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
                 case 2: networkPlayerObject = runner.Spawn(_playerPrefabs[1], GetSpawnPos(), Quaternion.identity, player); break;
-                case 3: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
-                default: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
+                default: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
             }
             spawnedCharacters.Add(player, networkPlayerObject);
         }
