@@ -3,7 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TMPro;
+using Unity.IO.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameController : NetworkBehaviour
@@ -11,6 +15,8 @@ public class GameController : NetworkBehaviour
     [SerializeField] private EnemySpawner _enemySpawner;
     [SerializeField] private CollectablesSpawner _collectablesSpawner;
     [SerializeField] private WaveScriptableObject _waveSettingSO;
+
+    public event EventHandler OnGameFinished;
 
     private List<float> _roundTime;
     private float _restTime;
@@ -21,34 +27,37 @@ public class GameController : NetworkBehaviour
     private int _currentWaveId;
 
     //--------------TIMER------------//
-    public float timeLeft;
-    public bool isTimerOn = false;
+    private float _timeLeft;
+    private bool _isTimerOn = false;
     public TextMeshProUGUI timerText;
 
     private void Update()
     {
-        if (isTimerOn)
+        if (_isTimerOn)
         {
-            if (timeLeft > 0)
+            if (_timeLeft > 0)
             {
-                timeLeft -= Time.deltaTime;
-                UpdateTimer(timeLeft);
+                _timeLeft -= Time.deltaTime;
+                RPC_UpdateTimer(_timeLeft);
             }
             else
             {
-                timeLeft = 0;
-                isTimerOn = false;
+                _timeLeft = 0;
+                _isTimerOn = false;
             }
         }
     }
-
-    private void UpdateTimer(float currentTime)
+    [Rpc]
+    private void RPC_UpdateTimer(float currentTime)
     {
-        currentTime += 1;
-        float minutes = Mathf.FloorToInt(currentTime / 60);
-        float seconds = Mathf.FloorToInt(currentTime % 60);
+        if (Object.HasStateAuthority)
+        {
+            currentTime += 1;
+            float minutes = Mathf.FloorToInt(currentTime / 60);
+            float seconds = Mathf.FloorToInt(currentTime % 60);
 
-        timerText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
+            timerText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
+        }
     }
 
     enum GameState
@@ -86,16 +95,19 @@ public class GameController : NetworkBehaviour
 
     public void StartGame()
     {
-        ChooseNextRound();
-        _collectablesSpawner.SpawnInitialWeapons();
-        _gameStarted = true;
-        isTimerOn = true;
+        if (Object.HasStateAuthority)
+        {
+            ChooseNextRound();
+            _collectablesSpawner.SpawnInitialWeapons();
+            _gameStarted = true;
+            _isTimerOn = true;
+        }
     }
 
     private void SetTimer(float seconds)
     {
-        timeLeft = seconds;
-        isTimerOn = true;
+        _timeLeft = seconds;
+        _isTimerOn = true;
     }
 
     private void StartRest()
@@ -134,7 +146,7 @@ public class GameController : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (!isTimerOn && _gameStarted)
+        if (!_isTimerOn && _gameStarted)
         {
             switch (_gameState)
             {
@@ -149,7 +161,7 @@ public class GameController : NetworkBehaviour
         waveCompletion[_currentWaveId] = true;
     }
 
-    public void ChooseNextRound()
+    private void ChooseNextRound()
     {
         var nextWave = waveCompletion.FirstOrDefault(wave => wave.Value == false);
         if (nextWave.Key != default(int))
@@ -159,7 +171,8 @@ public class GameController : NetworkBehaviour
         }
         else
         {
-            Debug.Log("Finished the game");
+            _gameStarted = false;
+            OnGameFinished?.Invoke(this, EventArgs.Empty);
         }
     }
 }

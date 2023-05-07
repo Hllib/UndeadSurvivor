@@ -1,3 +1,4 @@
+using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,16 +10,17 @@ public class SkinButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 {
     [SerializeField] private int _id;
     [SerializeField] private GameObject _skinWindow;
+    public static int skinId;
     private Image _img;
 
-    private void Start()
+    private void Awake()
     {
         _img = GetComponent<Image>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        PlayerPrefs.SetInt("Skin", _id);
+        skinId = _id;
         _skinWindow.SetActive(false);
     }
 

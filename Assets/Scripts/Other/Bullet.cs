@@ -10,6 +10,7 @@ public class Bullet : NetworkBehaviour
     private float _speed;
     private bool _hasValuesAssigned;
     private Vector3 _direction;
+    NetworkPlayer _player;
 
     public override void FixedUpdateNetwork()
     {
@@ -26,7 +27,7 @@ public class Bullet : NetworkBehaviour
 
     IEnumerator DestroyBullet()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
         Runner.Despawn(Object);
     }
 
@@ -45,12 +46,24 @@ public class Bullet : NetworkBehaviour
         _direction = direction;
     }
 
-    public void AssignData(float speed, int damage, Vector3 direction)
+    private void SetPlayer(NetworkPlayer player)
+    {
+        _player = player;
+    }
+
+    public void AssignData(float speed, int damage, Vector3 direction, NetworkPlayer player)
     {
         SetSpeed(speed);
         SetDamage(damage);
         SetDirection(direction);
+        SetPlayer(player);
         _hasValuesAssigned = true;
+    }
+
+    private void UpdatePlayerScore(int damageSurplus, bool hasKilled)
+    {
+        int killCountSurplus = hasKilled ? 1 : 0;
+        _player.UpdateScore(damageSurplus, killCountSurplus);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -60,8 +73,12 @@ public class Bullet : NetworkBehaviour
         if (damagedObject != null)
         {
             StopAllCoroutines();
+            UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
             damagedObject.Damage(_damage);
-            Runner.Despawn(Object);
+            if (Object != null)
+            {
+                Runner.Despawn(Object);
+            }
         }
     }
 

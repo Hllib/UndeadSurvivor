@@ -9,55 +9,62 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 {
     private NetworkRigidbody2D _rb;
     CinemachineVirtualCamera _camera;
-    private GameController _gameControlller;
 
     [SerializeField] private Bomb _bombPrefab;
     [SerializeField] private NetworkPlayerAnimator _networkAnimator;
     [SerializeField] private PlayerWeaponHandler _weaponHandler;
 
     private int _initialHealth = 10;
-    private int _health;
-    private int _ammoAmount = 15;
+    public int Health { get; set; }
+
+    public int damageDone;
+    public int enemiesKilled;
     private int _bombAmount;
+    public string playerName;
 
     public void AddBomb()
     {
         _bombAmount += 1;
     }
 
-    public void AddAmmo(int amountToAdd)
+    public void UpdateScore(int damageDoneSurplus, int enemiesKilledSurplus)
     {
-        _ammoAmount += amountToAdd;
-        UIManager.Instance.UpdateAmmo(_ammoAmount);
+        damageDone += damageDoneSurplus;
+        enemiesKilled += enemiesKilledSurplus;
     }
 
-    private void MinusAmmo(object sender, EventArgs e)
-    {
-        _ammoAmount -= 1;
-    }
+    //public void AddAmmo(int amountToAdd)
+    //{
+    //    _ammoAmount += amountToAdd;
+    //    UIManager.Instance.UpdateAmmo(_ammoAmount);
+    //}
 
-    public void UpdateAmmo(int ammoAmount)
-    {
-        _ammoAmount = ammoAmount;
-        UIManager.Instance.UpdateAmmo(_ammoAmount);
-    }
+    //private void MinusAmmo(object sender, EventArgs e)
+    //{
+    //    _ammoAmount -= 1;
+    //}
+
+    //public void UpdateAmmo(int ammoAmount)
+    //{
+    //    _ammoAmount = ammoAmount;
+    //    UIManager.Instance.UpdateAmmo(_ammoAmount);
+    //}
 
     public void UpdateHealth(int unitsToRemove)
     {
-        _health -= unitsToRemove;
-        UIManager.Instance.UpdateHealth(_health);
+        Health -= unitsToRemove;
+        UIManager.Instance.UpdateHealth(Health);
     }
 
     public void UpdateHealth(int unitsToAdd, bool isHealing)
     {
-        _health += unitsToAdd;
-        UIManager.Instance.UpdateHealth(_health);
+        Health += unitsToAdd;
+        UIManager.Instance.UpdateHealth(Health);
     }
 
     private void Awake()
     {
         _rb ??= GetComponent<NetworkRigidbody2D>();
-        _weaponHandler.OnShoot += MinusAmmo;
     }
 
     public override void Spawned()
@@ -67,12 +74,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             _rb ??= GetComponent<NetworkRigidbody2D>();
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
-            _health = _initialHealth;
-            UIManager.Instance.UpdateHealth(_health);
-        }
-        if (Object.HasStateAuthority)
-        {
-            _gameControlller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            Health = _initialHealth;
+            UIManager.Instance.UpdateHealth(Health);
+            playerName = Object.HasStateAuthority ? "Host" : "Client";
         }
     }
 
@@ -109,9 +113,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     public void Damage(int damage)
     {
         UpdateHealth(damage);
-        if (_health <= 0)
+        if (Health <= 0)
         {
-            UIManager.Instance.UpdateHealth(_health);
+            UIManager.Instance.UpdateHealth(Health);
             Die();
         }
     }
@@ -120,7 +124,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     private void Die()
     {
-        Runner.Despawn(Object);
-        //OnPlayerDead?.Invoke(this, EventArgs.Empty);
+
     }
 }

@@ -13,8 +13,15 @@ public class PlayerWeaponHandler : NetworkBehaviour
     [SerializeField] private Transform _gunPoint;
     private Transform _aimTransform;
     private int _multipleShootAmount = 3;
+    private int _ammoAmount;
 
-    public event EventHandler OnShoot;
+    private float canShoot = 0f;
+    private float shootRate = 1.5f;
+
+    public void AddAmmo(int ammoToAdd)
+    {
+        _ammoAmount += ammoToAdd;
+    }
 
     [Rpc]
     public void RPC_ShowWeapon(RpcInfo info = default)
@@ -46,7 +53,11 @@ public class PlayerWeaponHandler : NetworkBehaviour
 
         if (_weaponSO != null && inputData.canShoot)
         {
-            RPC_Shoot();
+            if (Time.time > canShoot && _ammoAmount > 0)
+            {
+                RPC_Shoot();
+                canShoot = Time.time + shootRate;
+            }
         }
     }
 
@@ -61,16 +72,18 @@ public class PlayerWeaponHandler : NetworkBehaviour
         {
             FireBullet(1);
         }
-        OnShoot?.Invoke(this, EventArgs.Empty);
+        _ammoAmount -= 1;
     }
 
     private void FireBullet(int bulletAmount)
     {
+        float offset = -0.3f;
         for (int i = 0; i < bulletAmount; i++)
         {
-            Vector3 startPosition = new Vector3(_gunPoint.transform.position.x + i, _gunPoint.transform.position.y + i, _gunPoint.transform.position.z);
+            Vector3 startPosition = new Vector3(_gunPoint.transform.position.x, _gunPoint.transform.position.y + offset, _gunPoint.transform.position.z);
             var bullet = Runner.Spawn(_bulletPrefab, startPosition, Quaternion.identity, Object.InputAuthority);
-            bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage, _gunPoint.transform.right);
+            bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage, _gunPoint.transform.right, this.GetComponentInParent<NetworkPlayer>());
+            offset += 0.3f;
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Zombie : Enemy, IDamageable
 {    
     EnemyScriptableObject currentAI;
+    public int Health { get; set; }
 
     protected override void SetInitialSettings()
     {
@@ -14,7 +15,7 @@ public class Zombie : Enemy, IDamageable
         attackRadius = currentAI.attackRadius;
         attackRate = currentAI.attackRate;
         damage = currentAI.damage;  
-        health = currentAI.health;
+        Health = currentAI.health;
     }
 
     protected override void Attack()
@@ -24,8 +25,8 @@ public class Zombie : Enemy, IDamageable
 
     public void Damage(int damage)
     {
-        health -= damage;
-        if(health <= 0)
+        Health -= damage;
+        if(Health <= 0)
         {
             Destroy(gameObject);
         }

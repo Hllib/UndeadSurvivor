@@ -13,7 +13,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _networkRunner;
     [SerializeField] private NetworkInputHandler _playerInputHandler;
     [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     [SerializeField] private GameObject _coverUI;
 
     private void Start()
@@ -59,16 +59,17 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            var skinId = PlayerPrefs.GetInt("Skin");
+            var skinId = SkinButton.skinId;
+            Debug.Log("SKIN ID: " + skinId);
             NetworkObject networkPlayerObject;
             switch (skinId)
             {
                 case 1: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
                 case 2: networkPlayerObject = runner.Spawn(_playerPrefabs[1], GetSpawnPos(), Quaternion.identity, player); break;
                 case 3: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
-                default: networkPlayerObject = null; Debug.LogError("Player prefab not found"); break;
+                default: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
             }
-            _spawnedCharacters.Add(player, networkPlayerObject);
+            spawnedCharacters.Add(player, networkPlayerObject);
         }
     }
 
