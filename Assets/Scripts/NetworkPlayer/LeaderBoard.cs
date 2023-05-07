@@ -29,8 +29,7 @@ public class LeaderBoard : NetworkBehaviour
             string playerStat = string.Format("Player name: {0}\n Kills: {1}\n Damage: {2}\n", player.playerName, player.enemiesKilled, player.damageDone);
             stringBuilder.AppendLine(playerStat);
             stringBuilder.AppendLine("**************************");
-        }
-        Debug.Log(stringBuilder.ToString());    
+        } 
         return stringBuilder.ToString();
     }
 

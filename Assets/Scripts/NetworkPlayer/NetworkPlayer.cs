@@ -22,6 +22,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     private int _bombAmount;
     public string playerName;
 
+    public delegate void HealthSender(int healthAmount);
+    public event HealthSender OnHealthChanged;
+
     public void AddBomb()
     {
         _bombAmount += 1;
@@ -33,14 +36,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         enemiesKilled += enemiesKilledSurplus;
     }
 
-    public void UpdateHealth(int unitsToRemove)
+    public void UpdateHealth(int healthSurplus, bool toAdd)
     {
-        Health -= unitsToRemove;
-    }
-
-    public void UpdateHealth(int unitsToAdd, bool isHealing)
-    {
-        Health += unitsToAdd;
+        switch (toAdd)
+        {
+            case true: Health += healthSurplus; break;
+            default: Health -= healthSurplus; break;
+        }
+        OnHealthChanged?.Invoke(Health);
     }
 
     private void Awake()
@@ -100,7 +103,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     public void Damage(int damage)
     {
-        UpdateHealth(damage);
+        UpdateHealth(damage, false);
         if (Health <= 0)
         {
             UIManager.Instance.UpdateHealth(Health);

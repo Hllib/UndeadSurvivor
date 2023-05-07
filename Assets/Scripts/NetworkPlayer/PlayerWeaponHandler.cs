@@ -18,9 +18,17 @@ public class PlayerWeaponHandler : NetworkBehaviour
     private float canShoot = 0f;
     private float shootRate = 1.5f;
 
-    public void AddAmmo(int ammoToAdd)
+    public delegate void AmmoSender(int ammoAmount);
+    public event AmmoSender OnAmmoChanged;
+
+    public void UpdateAmmo(int ammoSurplus, bool toAdd)
     {
-        _ammoAmount += ammoToAdd;
+        switch (toAdd)
+        {
+            case true: _ammoAmount += ammoSurplus; break;
+            default: _ammoAmount -= ammoSurplus; break;
+        }
+        OnAmmoChanged?.Invoke(_ammoAmount);
     }
 
     [Rpc]
@@ -67,7 +75,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
         {
             FireBullet(1);
         }
-        _ammoAmount -= 1;
+        UpdateAmmo(1, false);
     }
 
     private void FireBullet(int bulletAmount)

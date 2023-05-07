@@ -12,7 +12,7 @@ public class AmmoBox : NetworkBehaviour
         var player = collision.gameObject.GetComponent<NetworkPlayer>();
         if (player != null)
         {
-            player.GetComponentInChildren<PlayerWeaponHandler>().AddAmmo(_ammoInBox);
+            player.GetComponentInChildren<PlayerWeaponHandler>().UpdateAmmo(_ammoInBox, true);
             Runner.Despawn(Object);
         }
     }
