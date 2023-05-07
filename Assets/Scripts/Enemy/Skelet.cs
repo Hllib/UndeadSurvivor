@@ -6,12 +6,17 @@ public class Skelet : Enemy, IDamageable
 {
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private Transform _firePoint;
-    EnemyScriptableObject currentAI; 
+    public int Health { get; set; }
+
+    private float canShoot = 0f;
+    private float shootRate = 1.5f;
+
+    EnemyScriptableObject currentAI;
 
     public void Damage(int damage)
     {
-        health -= damage;
-        if (health <= 0)
+        Health -= damage;
+        if (Health <= 0)
         {
             Destroy(gameObject);
         }
@@ -22,7 +27,7 @@ public class Skelet : Enemy, IDamageable
         currentAI = enemyScriptableObject;
 
         speed = currentAI.speed;
-        health = currentAI.health;
+        Health = currentAI.health;
 
         attackRadius = currentAI.attackRadius;
         attackRate = currentAI.attackRate;
@@ -31,7 +36,16 @@ public class Skelet : Enemy, IDamageable
 
     protected override void Attack()
     {
-        //player.Damage(currentAI.damage);
+        Vector2 shootDirection = (player.transform.position - transform.position).normalized;
+        float aimAngle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
+        _firePoint.eulerAngles = new Vector3(0, 0, aimAngle);
+
+        if(Time.time > canShoot)
+        {
+            var bullet = Runner.Spawn(_bulletPrefab, _firePoint.transform.position, Quaternion.identity);
+            bullet.GetComponent<SkeletBullet>().AssignData(currentAI.damage, _firePoint.transform.right);
+            canShoot = Time.time + shootRate;
+        }
     }
 
     public override void CalculateMovement()

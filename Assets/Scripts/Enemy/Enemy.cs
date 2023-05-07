@@ -14,7 +14,6 @@ public abstract class Enemy : NetworkBehaviour
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
     protected NetworkPlayer player;
-    protected float health;
 
     protected bool isDead;
 

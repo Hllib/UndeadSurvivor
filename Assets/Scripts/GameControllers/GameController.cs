@@ -3,7 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TMPro;
+using Unity.IO.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : NetworkBehaviour
 {
@@ -11,7 +17,8 @@ public class GameController : NetworkBehaviour
     [SerializeField] private CollectablesSpawner _collectablesSpawner;
     [SerializeField] private WaveScriptableObject _waveSettingSO;
 
-    [Networked] public TickTimer roundTime { get; set; }
+    public event EventHandler OnGameFinished;
+
     private List<float> _roundTime;
     private float _restTime;
 
@@ -19,6 +26,55 @@ public class GameController : NetworkBehaviour
     private GameState _gameState;
     private bool _gameStarted;
     private int _currentWaveId;
+
+    //--------------TIMER------------//
+    [Networked(OnChanged = nameof(OnTimerChanged))]
+    public float _timeLeft { get; set; }
+
+    private bool _isTimerOn { get; set; }
+    public TextMeshProUGUI timerText;
+    private float minutes { get; set; }
+    private float seconds { get; set; }
+
+    private void Update()
+    {
+        if (Object != null && _isTimerOn)
+        {
+            if (_timeLeft > 0)
+            {
+                _timeLeft -= Time.deltaTime;
+            }
+            else
+            {
+                _timeLeft = 0;
+                _isTimerOn = false;
+            }
+        }
+    }
+
+    public static void OnTimerChanged(Changed<GameController> changed)
+    {
+        var gameController = changed.Behaviour;
+        var currentTime = gameController._timeLeft + 1;
+
+        gameController.minutes = Mathf.FloorToInt(currentTime / 60);
+        gameController.seconds = Mathf.FloorToInt(currentTime % 60);
+
+        gameController.timerText.text = string.Format("{0:00} : {1:00}", gameController.minutes, gameController.seconds);
+    }
+
+    [Rpc]
+    private void RPC_UpdateTimer(float currentTime, RpcInfo info = default)
+    {
+        if (Object.HasStateAuthority)
+        {
+            currentTime += 1;
+            minutes = Mathf.FloorToInt(currentTime / 60);
+            seconds = Mathf.FloorToInt(currentTime % 60);
+
+            timerText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
+        }
+    }
 
     enum GameState
     {
@@ -55,14 +111,24 @@ public class GameController : NetworkBehaviour
 
     public void StartGame()
     {
-        ChooseNextRound();
-        _collectablesSpawner.SpawnInitialWeapons();
-        _gameStarted = true;
+        if (Object.HasStateAuthority)
+        {
+            ChooseNextRound();
+            _collectablesSpawner.SpawnInitialWeapons();
+            _gameStarted = true;
+            _isTimerOn = true;
+        }
     }
 
-    public void SetTimer(float seconds)
+    public void EndGame()
     {
-        roundTime = TickTimer.CreateFromSeconds(Runner, seconds);
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    private void SetTimer(float seconds)
+    {
+        _timeLeft = seconds;
+        _isTimerOn = true;
     }
 
     private void StartRest()
@@ -84,15 +150,15 @@ public class GameController : NetworkBehaviour
                 SetTimer(_roundTime[0]);
                 _currentWaveId = (int)SpawnWave.Wave1;
                 break;
-            case SpawnWave.Wave2: 
-                _enemySpawner.StartWave((int)SpawnWave.Wave2); 
-                _collectablesSpawner.StartWave((int)SpawnWave.Wave2); 
+            case SpawnWave.Wave2:
+                _enemySpawner.StartWave((int)SpawnWave.Wave2);
+                _collectablesSpawner.StartWave((int)SpawnWave.Wave2);
                 SetTimer(_roundTime[1]);
-                _currentWaveId = (int)SpawnWave.Wave2; 
+                _currentWaveId = (int)SpawnWave.Wave2;
                 break;
-            case SpawnWave.Wave3: 
-                _enemySpawner.StartWave((int)SpawnWave.Wave3); 
-                _collectablesSpawner.StartWave((int)SpawnWave.Wave3); 
+            case SpawnWave.Wave3:
+                _enemySpawner.StartWave((int)SpawnWave.Wave3);
+                _collectablesSpawner.StartWave((int)SpawnWave.Wave3);
                 SetTimer(_roundTime[2]);
                 _currentWaveId = (int)SpawnWave.Wave3;
                 break;
@@ -101,7 +167,7 @@ public class GameController : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (roundTime.Expired(Runner) && _gameStarted)
+        if (!_isTimerOn && _gameStarted)
         {
             switch (_gameState)
             {
@@ -116,7 +182,7 @@ public class GameController : NetworkBehaviour
         waveCompletion[_currentWaveId] = true;
     }
 
-    public void ChooseNextRound()
+    private void ChooseNextRound()
     {
         var nextWave = waveCompletion.FirstOrDefault(wave => wave.Value == false);
         if (nextWave.Key != default(int))
@@ -126,7 +192,8 @@ public class GameController : NetworkBehaviour
         }
         else
         {
-            Debug.Log("Finished the game");
+            _gameStarted = false;
+            OnGameFinished?.Invoke(this, EventArgs.Empty);
         }
     }
 }
