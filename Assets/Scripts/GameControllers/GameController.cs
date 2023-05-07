@@ -9,6 +9,7 @@ using TMPro;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : NetworkBehaviour
 {
@@ -27,18 +28,21 @@ public class GameController : NetworkBehaviour
     private int _currentWaveId;
 
     //--------------TIMER------------//
-    private float _timeLeft;
-    private bool _isTimerOn = false;
+    [Networked(OnChanged = nameof(OnTimerChanged))]
+    public float _timeLeft { get; set; }
+
+    private bool _isTimerOn { get; set; }
     public TextMeshProUGUI timerText;
+    private float minutes { get; set; }
+    private float seconds { get; set; }
 
     private void Update()
     {
-        if (_isTimerOn)
+        if (Object != null && _isTimerOn)
         {
             if (_timeLeft > 0)
             {
                 _timeLeft -= Time.deltaTime;
-                RPC_UpdateTimer(_timeLeft);
             }
             else
             {
@@ -47,14 +51,26 @@ public class GameController : NetworkBehaviour
             }
         }
     }
+
+    public static void OnTimerChanged(Changed<GameController> changed)
+    {
+        var gameController = changed.Behaviour;
+        var currentTime = gameController._timeLeft + 1;
+
+        gameController.minutes = Mathf.FloorToInt(currentTime / 60);
+        gameController.seconds = Mathf.FloorToInt(currentTime % 60);
+
+        gameController.timerText.text = string.Format("{0:00} : {1:00}", gameController.minutes, gameController.seconds);
+    }
+
     [Rpc]
-    private void RPC_UpdateTimer(float currentTime)
+    private void RPC_UpdateTimer(float currentTime, RpcInfo info = default)
     {
         if (Object.HasStateAuthority)
         {
             currentTime += 1;
-            float minutes = Mathf.FloorToInt(currentTime / 60);
-            float seconds = Mathf.FloorToInt(currentTime % 60);
+            minutes = Mathf.FloorToInt(currentTime / 60);
+            seconds = Mathf.FloorToInt(currentTime % 60);
 
             timerText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
         }
@@ -102,6 +118,11 @@ public class GameController : NetworkBehaviour
             _gameStarted = true;
             _isTimerOn = true;
         }
+    }
+
+    public void EndGame()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void SetTimer(float seconds)
