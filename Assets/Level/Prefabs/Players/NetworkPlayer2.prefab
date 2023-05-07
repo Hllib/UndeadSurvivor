@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 4345359025208471862}
   - component: {fileID: 4345359025208471861}
   - component: {fileID: -4038751221809890969}
+  - component: {fileID: 3256383770383563090}
   m_Layer: 6
   m_Name: NetworkPlayer2
   m_TagString: Player
@@ -201,7 +202,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _bombPrefab: {fileID: 396455281878363753, guid: be600dd4086c24d4db53de1f3d7cb3e2, type: 3}
   _networkAnimator: {fileID: 8762722543697647730}
-  _weaponHandler: {fileID: 5671230182336423041}
+  _weaponHandler: {fileID: 3256383770383563090}
   damageDone: 0
   enemiesKilled: 0
   playerName: 
@@ -245,7 +246,7 @@ MonoBehaviour:
   - {fileID: 4345359025208471860}
   - {fileID: 8762722543697647730}
   - {fileID: 4345359025208471861}
-  - {fileID: 5671230182336423041}
+  - {fileID: 3256383770383563090}
   SimulationBehaviours: []
 --- !u!50 &4345359025208471862
 Rigidbody2D:
@@ -322,6 +323,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3256383770383563090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345359025208471849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 538d6578f1c973246a3f254c87719f2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _weaponSpriteRenderer: {fileID: 7338925537080763308}
+  _bulletPrefab: {fileID: 1667211528, guid: 15e83e6c0e652e540a194e2cec051442, type: 3}
+  _gunPoint: {fileID: 339758498650661684}
+  _aimTransform: {fileID: 6480491584629291825}
 --- !u!1 &7460264868989229561
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +349,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6480491584629291825}
-  - component: {fileID: 5671230182336423041}
   m_Layer: 6
   m_Name: Aim
   m_TagString: Untagged
@@ -356,22 +373,6 @@ Transform:
   m_Father: {fileID: 499711529925265376}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5671230182336423041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7460264868989229561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 538d6578f1c973246a3f254c87719f2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  _weaponSpriteRenderer: {fileID: 7338925537080763308}
-  _bulletPrefab: {fileID: 1667211528, guid: 15e83e6c0e652e540a194e2cec051442, type: 3}
-  _gunPoint: {fileID: 339758498650661684}
 --- !u!1 &7631144565787870615
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
     [SerializeField] private SpriteRenderer _weaponSpriteRenderer;
     [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private Transform _gunPoint;
-    private Transform _aimTransform;
+    [SerializeField] private Transform _aimTransform;
     private int _multipleShootAmount = 3;
     private int _ammoAmount;
 
@@ -24,20 +24,15 @@ public class PlayerWeaponHandler : NetworkBehaviour
     }
 
     [Rpc]
-    public void RPC_ShowWeapon(RpcInfo info = default)
+    public void RPC_ShowWeapon()
     {
-        _weaponSpriteRenderer.sprite = _weaponSO.sprite;
+        _weaponSpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Weapons/" + _weaponSO.title);
     }
 
     public void AssignWeapon(WeaponScriptableObject weaponSO)
     {
         _weaponSO = weaponSO;
         _gunPoint.transform.localPosition = new Vector3(_weaponSO.shootStartPoints.X, _weaponSO.shootStartPoints.Y, 0);
-    }
-
-    private void Awake()
-    {
-        _aimTransform = GetComponent<Transform>();
     }
 
     [Rpc]
@@ -77,13 +72,18 @@ public class PlayerWeaponHandler : NetworkBehaviour
 
     private void FireBullet(int bulletAmount)
     {
-        float offset = -0.3f;
-        for (int i = 0; i < bulletAmount; i++)
+        if (Object.HasStateAuthority)
         {
-            Vector3 startPosition = new Vector3(_gunPoint.transform.position.x, _gunPoint.transform.position.y + offset, _gunPoint.transform.position.z);
-            var bullet = Runner.Spawn(_bulletPrefab, startPosition, Quaternion.identity, Object.InputAuthority);
-            bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage, _gunPoint.transform.right, this.GetComponentInParent<NetworkPlayer>());
-            offset += 0.3f;
+            float offset = -0.3f;
+            for (int i = 0; i < bulletAmount; i++)
+            {
+                Vector3 startPosition = new Vector3(_gunPoint.transform.position.x, _gunPoint.transform.position.y + offset, _gunPoint.transform.position.z);
+                var bullet = Runner.Spawn(_bulletPrefab, startPosition, Quaternion.identity, Object.InputAuthority);
+                Debug.Log(bullet.name);
+                Debug.Log(GetComponent<NetworkPlayer>().playerName);
+                bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage, _gunPoint.transform.right, GetComponent<NetworkPlayer>());
+                offset += 0.3f;
+            }
         }
     }
 }

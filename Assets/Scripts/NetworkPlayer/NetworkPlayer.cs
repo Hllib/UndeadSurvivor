@@ -33,33 +33,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         enemiesKilled += enemiesKilledSurplus;
     }
 
-    //public void AddAmmo(int amountToAdd)
-    //{
-    //    _ammoAmount += amountToAdd;
-    //    UIManager.Instance.UpdateAmmo(_ammoAmount);
-    //}
-
-    //private void MinusAmmo(object sender, EventArgs e)
-    //{
-    //    _ammoAmount -= 1;
-    //}
-
-    //public void UpdateAmmo(int ammoAmount)
-    //{
-    //    _ammoAmount = ammoAmount;
-    //    UIManager.Instance.UpdateAmmo(_ammoAmount);
-    //}
-
     public void UpdateHealth(int unitsToRemove)
     {
         Health -= unitsToRemove;
-        UIManager.Instance.UpdateHealth(Health);
     }
 
     public void UpdateHealth(int unitsToAdd, bool isHealing)
     {
         Health += unitsToAdd;
-        UIManager.Instance.UpdateHealth(Health);
     }
 
     private void Awake()
@@ -76,8 +57,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             _camera.Follow = this.transform;
             Health = _initialHealth;
             UIManager.Instance.UpdateHealth(Health);
-            playerName = Object.HasStateAuthority ? "Host" : "Client";
+            string name = Object.HasStateAuthority ? "Host" : "Client";
+            RPC_UpdateName(name);
         }
+    }
+
+    [Rpc]
+    private void RPC_UpdateName(string name, RpcInfo info = default)
+    {
+        playerName = name;
     }
 
     public void PlayerLeft(PlayerRef player)

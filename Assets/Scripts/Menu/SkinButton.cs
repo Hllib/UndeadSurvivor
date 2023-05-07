@@ -10,7 +10,6 @@ public class SkinButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 {
     [SerializeField] private int _id;
     [SerializeField] private GameObject _skinWindow;
-    public static int skinId;
     private Image _img;
 
     private void Awake()
@@ -20,7 +19,7 @@ public class SkinButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        skinId = _id;
+        PlayerPrefs.SetInt("Skin", _id);
         _skinWindow.SetActive(false);
     }
 

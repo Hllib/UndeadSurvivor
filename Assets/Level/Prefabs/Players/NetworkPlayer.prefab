@@ -78,7 +78,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 0.5}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -124,7 +124,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 943790516474338755}
-  - component: {fileID: 2746167463120247458}
   m_Layer: 6
   m_Name: Aim
   m_TagString: Untagged
@@ -139,7 +138,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4053716982637701714}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -149,22 +148,6 @@ Transform:
   m_Father: {fileID: 3811977154874815101}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2746167463120247458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4053716982637701714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 538d6578f1c973246a3f254c87719f2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  _weaponSpriteRenderer: {fileID: 1476512313751357091}
-  _bulletPrefab: {fileID: 1667211528, guid: 15e83e6c0e652e540a194e2cec051442, type: 3}
-  _gunPoint: {fileID: 4140331993082600788}
 --- !u!1 &4345359025208471849
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +163,7 @@ GameObject:
   - component: {fileID: 4345359025208471862}
   - component: {fileID: 4345359025208471861}
   - component: {fileID: -8302148626029300335}
+  - component: {fileID: 7553475836948003975}
   m_Layer: 6
   m_Name: NetworkPlayer
   m_TagString: Player
@@ -218,7 +202,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _bombPrefab: {fileID: 396455281878363753, guid: be600dd4086c24d4db53de1f3d7cb3e2, type: 3}
   _networkAnimator: {fileID: 5287842833491222230}
-  _weaponHandler: {fileID: 2746167463120247458}
+  _weaponHandler: {fileID: 7553475836948003975}
   damageDone: 0
   enemiesKilled: 0
   playerName: 
@@ -262,7 +246,7 @@ MonoBehaviour:
   - {fileID: 4345359025208471860}
   - {fileID: 5287842833491222230}
   - {fileID: 4345359025208471861}
-  - {fileID: 2746167463120247458}
+  - {fileID: 7553475836948003975}
   SimulationBehaviours: []
 --- !u!50 &4345359025208471862
 Rigidbody2D:
@@ -339,6 +323,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7553475836948003975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345359025208471849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 538d6578f1c973246a3f254c87719f2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _weaponSpriteRenderer: {fileID: 1476512313751357091}
+  _bulletPrefab: {fileID: 1667211528, guid: 15e83e6c0e652e540a194e2cec051442, type: 3}
+  _gunPoint: {fileID: 4140331993082600788}
+  _aimTransform: {fileID: 943790516474338755}
 --- !u!1 &4345359025217182144
 GameObject:
   m_ObjectHideFlags: 0

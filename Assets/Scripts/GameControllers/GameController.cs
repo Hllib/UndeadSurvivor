@@ -18,6 +18,7 @@ public class GameController : NetworkBehaviour
     [SerializeField] private WaveScriptableObject _waveSettingSO;
 
     public event EventHandler OnGameFinished;
+    public event EventHandler OnGameStarted;
 
     private List<float> _roundTime;
     private float _restTime;
@@ -117,6 +118,7 @@ public class GameController : NetworkBehaviour
             _collectablesSpawner.SpawnInitialWeapons();
             _gameStarted = true;
             _isTimerOn = true;
+            OnGameStarted?.Invoke(this, EventArgs.Empty);
         }
     }
 
