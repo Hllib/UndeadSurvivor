@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24d066b76c9222948873e3f9ccb76193, type: 3}
   m_Name: StrongZombie
   m_EditorClassIdentifier: 
-  speed: 1
-  health: 10
+  speed: 0.65
+  health: 15
   attackRate: 2
   attackRadius: 1
-  damage: 2
+  damage: 3

@@ -11,8 +11,8 @@ using UnityEngine.SceneManagement;
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _networkRunner;
-    [SerializeField] private NetworkInputHandler _playerInputHandler;
-    [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
+    private NetworkInputHandler _playerInputHandler;
+    [SerializeField] private NetworkPrefabRef _playerPrefab;
     public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     [SerializeField] private GameObject _coverUI;
 
@@ -59,14 +59,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            var skinId = PlayerPrefs.GetInt("Skin");
-            NetworkObject networkPlayerObject;
-            switch (skinId)
-            {
-                case 1: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
-                case 2: networkPlayerObject = runner.Spawn(_playerPrefabs[1], GetSpawnPos(), Quaternion.identity, player); break;
-                default: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
-            }
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, GetSpawnPos(), Quaternion.identity, player);
             spawnedCharacters.Add(player, networkPlayerObject);
         }
     }
@@ -87,10 +80,17 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        var inputData = _playerInputHandler.GetNetworkInput();
-        inputData.canShoot = (inputData.shootDirection.x != 0 || inputData.shootDirection.y != 0) ? true : false;
+        if(_playerInputHandler == null && NetworkPlayer.Local != null)
+        {
+            _playerInputHandler = NetworkPlayer.Local.GetComponent<NetworkInputHandler>();
+        }
 
-        input.Set(inputData);
+        if(_playerInputHandler != null)
+        {
+            var inputData = _playerInputHandler.GetNetworkInput();
+            inputData.canShoot = (inputData.shootDirection.x != 0 || inputData.shootDirection.y != 0) ? true : false;
+            input.Set(inputData);
+        }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -105,7 +105,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void OnConnectedToServer(NetworkRunner runner)

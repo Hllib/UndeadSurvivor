@@ -1,10 +1,16 @@
 using Fusion;
+using System;
 using System.Linq;
 using UnityEngine;
 
 public class BombButton : NetworkBehaviour
 {
-    [SerializeField] private NetworkPlayer _player;
+    private NetworkPlayer _player;
+
+    private void Awake()
+    {
+        _player = GetComponentInParent<NetworkPlayer>();
+    }
 
     public void DropBomb()
     {

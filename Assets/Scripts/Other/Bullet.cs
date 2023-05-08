@@ -74,12 +74,15 @@ public class Bullet : NetworkBehaviour
 
             if (damagedObject != null)
             {
-                StopAllCoroutines();
-                UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
-                damagedObject.Damage(_damage);
-                if (Object != null)
+                if(this != null)
                 {
-                    Runner.Despawn(Object);
+                    StopAllCoroutines();
+                    UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
+                    damagedObject.Damage(_damage);
+                    if (Object != null)
+                    {
+                        Destroy(gameObject);
+                    }
                 }
             }
         }

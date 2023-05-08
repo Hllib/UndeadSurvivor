@@ -4,10 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TMPro;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,12 +25,14 @@ public class GameController : NetworkBehaviour
     private bool _gameStarted;
     private int _currentWaveId;
 
-    //--------------TIMER------------//
     [Networked(OnChanged = nameof(OnTimerChanged))]
     public float _timeLeft { get; set; }
 
     private bool _isTimerOn { get; set; }
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI gameModeHeader;
+    private readonly string gameModeHeaderRest = "Mode: rest";
+    private readonly string gameModeHeaderWave = "Mode: wave";
     private float minutes { get; set; }
     private float seconds { get; set; }
 
@@ -115,11 +114,17 @@ public class GameController : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             ChooseNextRound();
-            _collectablesSpawner.SpawnInitialWeapons();
             _gameStarted = true;
             _isTimerOn = true;
             OnGameStarted?.Invoke(this, EventArgs.Empty);
+            RPC_UpdateGameModeHeader(gameModeHeaderWave);
         }
+    }
+
+    [Rpc]
+    private void RPC_UpdateGameModeHeader(string header, RpcInfo info = default)
+    {
+        gameModeHeader.text = header;
     }
 
     public void EndGame()
@@ -136,6 +141,7 @@ public class GameController : NetworkBehaviour
     private void StartRest()
     {
         _enemySpawner.StopSpawning();
+        _collectablesSpawner.StopSpawning();
         _gameState = GameState.Rest;
 
         SetTimer(_restTime);
@@ -173,8 +179,8 @@ public class GameController : NetworkBehaviour
         {
             switch (_gameState)
             {
-                case GameState.Rest: ChooseNextRound(); break;
-                case GameState.Round: StartRest(); SetWaveAsCompleted(); break;
+                case GameState.Rest: ChooseNextRound(); RPC_UpdateGameModeHeader(gameModeHeaderWave); break;
+                case GameState.Round: StartRest(); SetWaveAsCompleted(); RPC_UpdateGameModeHeader(gameModeHeaderRest); break;
             }
         }
     }
@@ -182,6 +188,11 @@ public class GameController : NetworkBehaviour
     private void SetWaveAsCompleted()
     {
         waveCompletion[_currentWaveId] = true;
+    }
+
+    public void FinishGame()
+    {
+        OnGameFinished?.Invoke(this, EventArgs.Empty);
     }
 
     private void ChooseNextRound()
@@ -195,7 +206,9 @@ public class GameController : NetworkBehaviour
         else
         {
             _gameStarted = false;
-            OnGameFinished?.Invoke(this, EventArgs.Empty);
+            _collectablesSpawner.StopSpawning();
+            _enemySpawner.StopSpawning();
+            FinishGame();
         }
     }
 }

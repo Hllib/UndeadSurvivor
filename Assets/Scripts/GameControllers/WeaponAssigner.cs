@@ -11,7 +11,7 @@ public class WeaponAssigner : NetworkBehaviour
 
     private void Awake()
     {
-        //_gameController.OnGameStarted += AssignWeaponsToPlayers;
+        _gameController.OnGameStarted += AssignWeaponsToPlayers;
     }
 
     private void AssignWeaponsToPlayers(object sender, EventArgs e)
@@ -22,12 +22,11 @@ public class WeaponAssigner : NetworkBehaviour
             int randomIndex = 0;
             do
             {
-                randomIndex = UnityEngine.Random.Range(0, _weaponVariantsSO.Length - 1);
+                randomIndex = UnityEngine.Random.Range(0, _weaponVariantsSO.Length);
             } while (usedWeapons.Contains(randomIndex));
             usedWeapons.Add(randomIndex.GetHashCode());
 
             playerObj.GetComponent<PlayerWeaponHandler>().AssignWeapon(_weaponVariantsSO[randomIndex]);
-            playerObj.GetComponent<PlayerWeaponHandler>().RPC_ShowWeapon();
         }
     }
 }
