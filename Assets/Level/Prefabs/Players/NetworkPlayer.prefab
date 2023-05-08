@@ -166,7 +166,6 @@ GameObject:
   - component: {fileID: -8302148626029300335}
   - component: {fileID: 5256010841950641237}
   - component: {fileID: 8223598700172033645}
-  - component: {fileID: 7176713184219420878}
   m_Layer: 6
   m_Name: NetworkPlayer
   m_TagString: Player
@@ -230,7 +229,7 @@ MonoBehaviour:
   - {fileID: 9100000, guid: f9a20f3a58959f84c8ecc764723beb60, type: 2}
   - {fileID: 9100000, guid: 33d892d8742bc3b4b85a857de9e9edc0, type: 2}
   - {fileID: 9100000, guid: 98c5eeb113b9a3d478092657764dabd7, type: 2}
-  _playerSkinSetter: {fileID: 7176713184219420878}
+  _playerSkinSetter: {fileID: 0}
 --- !u!114 &7553475836948003975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,7 +273,6 @@ MonoBehaviour:
   - {fileID: 5287842833491222230}
   - {fileID: 7553475836948003975}
   - {fileID: 4345359025208471861}
-  - {fileID: 7176713184219420878}
   SimulationBehaviours: []
 --- !u!50 &4345359025208471862
 Rigidbody2D:
@@ -379,19 +377,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthText: {fileID: 0}
   _ammoText: {fileID: 0}
---- !u!114 &7176713184219420878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4345359025208471849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d0a2734adfce8443bd7882015f6c642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
 --- !u!1 &4345359025217182144
 GameObject:
   m_ObjectHideFlags: 0

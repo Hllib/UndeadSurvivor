@@ -248,12 +248,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86e7b69140ede4f44ba38c601cc2800a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefabs:
-  - RawGuidValue: 742b02f58b00cfb4cad8609e605296f2
-  - RawGuidValue: cbcbb87bbeb1d7144a59f4668352197f
-  - RawGuidValue: 393425998c120e848ab4ffc9bcf321f9
+  _playerPrefab:
+    RawGuidValue: 742b02f58b00cfb4cad8609e605296f2
   _coverUI: {fileID: 1769307434}
-  _skinSetter: {fileID: 0}
 --- !u!114 &134967452
 MonoBehaviour:
   m_ObjectHideFlags: 0

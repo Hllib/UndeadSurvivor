@@ -1,5 +1,6 @@
 using Fusion;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class NetworkPlayerAnimator : NetworkBehaviour
@@ -7,7 +8,7 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private RuntimeAnimatorController[] _runtimeAnimatorControllers;
-    [SerializeField] private PlayerSkinSetter _playerSkinSetter;
+    [Networked(OnChanged = nameof(OnAnimatorIdChanged))] public int animatorId { get; set; }
     private NetworkPlayer _player;
     private PlayerStates _currentState;
 
@@ -15,6 +16,17 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     {
         _player = GetComponentInParent<NetworkPlayer>();
         _player.OnPlayerDead += OnPlayerDead;
+    }
+
+    public static void OnAnimatorIdChanged(Changed<NetworkPlayerAnimator> changed)
+    {
+        changed.Behaviour.StartCoroutine(changed.Behaviour.ChangeSkin());
+    }
+
+    IEnumerator ChangeSkin()
+    {
+        yield return new WaitForSeconds(0.3f);
+        UpdateAnimator(animatorId);
     }
 
     public void UpdateAnimator(int id)
@@ -30,13 +42,16 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     public override void Spawned()
     {
         int id = PlayerPrefs.GetInt("Skin");
-        RPC_ChangeAnimator(id);
+        if (HasInputAuthority)
+        {
+            RPC_ChangeAnimator(id);
+        }
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     private void RPC_ChangeAnimator(int id)
     {
-        _playerSkinSetter.animatorId = id;
+        animatorId = id;
     }
 
     private void OnPlayerDead(object sender, EventArgs e)

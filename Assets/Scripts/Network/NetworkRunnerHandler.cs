@@ -13,7 +13,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _networkRunner;
     private NetworkInputHandler _playerInputHandler;
-    [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
+    [SerializeField] private NetworkPrefabRef _playerPrefab;
     public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     [SerializeField] private GameObject _coverUI;
 
@@ -56,22 +56,11 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    [SerializeField] private PlayerSkinSetter _skinSetter;
-
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
         {
-            //_skinSetter.UpdateSkin();
-            //var skinId = _skinSetter.SkinId;
-            //NetworkObject networkPlayerObject;
-            //switch (skinId)
-            //{
-            //    case 1: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
-            //    case 2: networkPlayerObject = runner.Spawn(_playerPrefabs[1], GetSpawnPos(), Quaternion.identity, player); break;
-            //    default: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
-            //}
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player);
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, GetSpawnPos(), Quaternion.identity, player);
             spawnedCharacters.Add(player, networkPlayerObject);
         }
     }
