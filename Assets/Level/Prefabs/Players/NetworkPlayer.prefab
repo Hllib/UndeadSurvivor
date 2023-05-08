@@ -225,6 +225,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _animator: {fileID: 8932275380019274195}
   _spriteRenderer: {fileID: 4345359025217182146}
+  _weaponSpriteRenderer: {fileID: 1476512313751357091}
 --- !u!114 &7553475836948003975
 MonoBehaviour:
   m_ObjectHideFlags: 0

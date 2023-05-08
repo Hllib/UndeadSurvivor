@@ -44,8 +44,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     {
         switch (toAdd)
         {
-            case true: Health += healthSurplus; Debug.LogError("adding health: " + healthSurplus); break;
-            default: Health -= healthSurplus; Debug.LogError("reducing health by: " + healthSurplus); break;
+            case true: Health += healthSurplus; break;
+            default: Health -= healthSurplus; break;
         }
         RPC_UpdateHealth(Health);
         OnHealthChanged?.Invoke(Health);
@@ -71,7 +71,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
-            Health = _initialHealth;
 
             string name = Object.HasStateAuthority ? "Host" : "Client";
             RPC_UpdateName(name);
@@ -79,6 +78,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             Instantiate(_playerCanvas, this.transform);
             OnUIInstantiated?.Invoke(this, EventArgs.Empty);
         }
+        RPC_UpdateHealth(_initialHealth);
     }
 
     private void TurnOnSpectator()
@@ -134,12 +134,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     {
         if (!IsDead)
         {
+            Debug.LogError("Health before damage: " + Health);
             UpdateHealth(damage, false);
+            Debug.LogError("Health after damage: " + Health);
             if (Health <= 0)
             {
                 RPC_Die();
                 OnPlayerDead?.Invoke(this, EventArgs.Empty);
-                //TurnOnSpectator();
+                TurnOnSpectator();
             }
         }
     }

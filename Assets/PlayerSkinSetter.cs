@@ -7,6 +7,7 @@ public class PlayerSkinSetter : NetworkBehaviour
 {
     public void UpdateSkin()
     {
+        Debug.LogError("CHOSEN SKIN ID: " + PlayerPrefs.GetInt("Skin"));
         RPC_UpdateSkinId(PlayerPrefs.GetInt("Skin"));
     }
 

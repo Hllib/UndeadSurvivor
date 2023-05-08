@@ -6,6 +6,7 @@ public class NetworkPlayerAnimator : NetworkBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private SpriteRenderer _weaponSpriteRenderer;
     private NetworkPlayer _player;
     private PlayerStates _currentState;
 
@@ -74,10 +75,12 @@ public class NetworkPlayerAnimator : NetworkBehaviour
         if (horizontalMove > 0) 
         {
             _spriteRenderer.flipX = false;
+            _weaponSpriteRenderer.flipX = false;
         }
         if (horizontalMove < 0) 
         {
             _spriteRenderer.flipX = true;
+            _weaponSpriteRenderer.flipX = true; 
         }
     }
 }
