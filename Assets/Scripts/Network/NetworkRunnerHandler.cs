@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {

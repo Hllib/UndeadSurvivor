@@ -74,7 +74,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
             string name = Object.HasStateAuthority ? "Host" : "Client";
             RPC_UpdateName(name);
-
             Instantiate(_playerCanvas, this.transform);
             OnUIInstantiated?.Invoke(this, EventArgs.Empty);
         }
