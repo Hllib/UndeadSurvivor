@@ -129,7 +129,7 @@ public class GameController : NetworkBehaviour
 
     public void EndGame()
     {
-        SceneManager.LoadScene("MainMenu");
+        Runner.Shutdown();
     }
 
     private void SetTimer(float seconds)
