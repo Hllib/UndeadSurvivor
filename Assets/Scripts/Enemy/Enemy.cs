@@ -52,6 +52,14 @@ public abstract class Enemy : NetworkBehaviour
         if (players.Any())
         {
             var index = UnityEngine.Random.Range(0, players.Length);
+            if(players.ElementAt(index).GetComponent<NetworkPlayer>().IsDead)
+            {
+
+            }
+            else
+            {
+
+            }
             this.player = players.ElementAt(index).GetComponent<NetworkPlayer>();
         }
     }

@@ -31,6 +31,22 @@ public class PlayerWeaponHandler : NetworkBehaviour
         OnAmmoChanged?.Invoke(_ammoAmount);
     }
 
+    private void Awake()
+    {
+        this.GetComponent<NetworkPlayer>().OnPlayerDead += OnPlayerDead;
+    }
+
+    private void OnPlayerDead(object sender, EventArgs e)
+    {
+        RPC_DisablePlayerWeapon();
+    }
+
+    [Rpc]
+    private void RPC_DisablePlayerWeapon()
+    {
+        _weaponSpriteRenderer.gameObject.SetActive(false);
+    }
+
     [Rpc]
     public void RPC_ShowWeapon()
     {

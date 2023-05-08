@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 4345359025208471861}
   - component: {fileID: 8511071021344971490}
   - component: {fileID: 4012531234468979544}
+  - component: {fileID: 6634002778900855503}
   m_Layer: 6
   m_Name: NetworkPlayer3
   m_TagString: Player
@@ -117,12 +118,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  damageDone: 0
+  enemiesKilled: 0
+  bombAmount: 0
+  playerName: 
+  _playerCanvas: {fileID: 2960989504694723415, guid: 31791279ed928ca49813a580114afa84, type: 3}
   _bombPrefab: {fileID: 396455281878363753, guid: be600dd4086c24d4db53de1f3d7cb3e2, type: 3}
   _networkAnimator: {fileID: 1524337022835620390}
   _weaponHandler: {fileID: 7453034430816014867}
-  damageDone: 0
-  enemiesKilled: 0
-  playerName: 
 --- !u!114 &1524337022835620390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,7 +184,6 @@ MonoBehaviour:
   - {fileID: 1524337022835620390}
   - {fileID: 7453034430816014867}
   - {fileID: 4345359025208471861}
-  - {fileID: 4012531234468979544}
   SimulationBehaviours: []
 --- !u!50 &4345359025208471862
 Rigidbody2D:
@@ -270,7 +272,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e12a474fc279d345a37811a92e7d216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
+  _healthText: {fileID: 0}
+  _ammoText: {fileID: 0}
+--- !u!114 &6634002778900855503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345359025208471849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6289aebf026f3ef4aa8a5e7d80d6e05d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveJoystick: {fileID: 0}
+  shootJoystick: {fileID: 0}
 --- !u!1 &7813561420440769192
 GameObject:
   m_ObjectHideFlags: 0

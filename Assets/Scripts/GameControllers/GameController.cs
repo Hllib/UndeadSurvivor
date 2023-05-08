@@ -28,7 +28,6 @@ public class GameController : NetworkBehaviour
     private bool _gameStarted;
     private int _currentWaveId;
 
-    //--------------TIMER------------//
     [Networked(OnChanged = nameof(OnTimerChanged))]
     public float _timeLeft { get; set; }
 

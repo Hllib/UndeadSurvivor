@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _networkRunner;
-    [SerializeField] private NetworkInputHandler _playerInputHandler;
+    private NetworkInputHandler _playerInputHandler;
     [SerializeField] private NetworkPrefabRef[] _playerPrefabs;
     public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     [SerializeField] private GameObject _coverUI;
@@ -87,10 +87,17 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        var inputData = _playerInputHandler.GetNetworkInput();
-        inputData.canShoot = (inputData.shootDirection.x != 0 || inputData.shootDirection.y != 0) ? true : false;
+        if(_playerInputHandler == null && NetworkPlayer.Local != null)
+        {
+            _playerInputHandler = NetworkPlayer.Local.GetComponent<NetworkInputHandler>();
+        }
 
-        input.Set(inputData);
+        if(_playerInputHandler != null)
+        {
+            var inputData = _playerInputHandler.GetNetworkInput();
+            inputData.canShoot = (inputData.shootDirection.x != 0 || inputData.shootDirection.y != 0) ? true : false;
+            input.Set(inputData);
+        }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

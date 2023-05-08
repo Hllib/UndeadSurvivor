@@ -5,31 +5,42 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerUIHandler : NetworkBehaviour
+public class PlayerUIHandler : MonoBehaviour
 {
-    private TextMeshProUGUI _healthText;
-    private TextMeshProUGUI _ammoText;
+    [SerializeField] private TextMeshProUGUI _healthText;
+    [SerializeField] private TextMeshProUGUI _ammoText;
     private NetworkPlayer _player;
     private PlayerWeaponHandler _playerWeaponHandler;
 
     private void Awake()
     {
-        _healthText = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<TextMeshProUGUI>();
-        _ammoText = GameObject.FindGameObjectWithTag("AmmoUI").GetComponent<TextMeshProUGUI>();
         _player = GetComponent<NetworkPlayer>();
         _playerWeaponHandler = GetComponent<PlayerWeaponHandler>();
 
+        _player.OnUIInstantiated += FindHUD;
         _player.OnHealthChanged += UpdateHealthUI;
         _playerWeaponHandler.OnAmmoChanged += UpdateAmmoUI;
     }
 
+    private void FindHUD(object sender, EventArgs e)
+    {
+        _healthText = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<TextMeshProUGUI>();
+        _ammoText = GameObject.FindGameObjectWithTag("AmmoUI").GetComponent<TextMeshProUGUI>();
+    }
+
     private void UpdateHealthUI(int healthAmount)
     {
-        _healthText.text = healthAmount.ToString();
+        if (_healthText != null)
+        {
+            _healthText.text = healthAmount.ToString();
+        }
     }
 
     private void UpdateAmmoUI(int ammoAmoutn)
     {
-        _ammoText.text = ammoAmoutn.ToString();
+        if (_ammoText != null)
+        {
+            _ammoText.text = ammoAmoutn.ToString();
+        }
     }
 }

@@ -8,6 +8,9 @@ TagManager:
   - VCam
   - AmmoUI
   - HealthUI
+  - CoverUI
+  - MoveJoystick
+  - ShootJoystick
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Cinemachine;
@@ -7,23 +5,27 @@ using System;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 {
-    private NetworkRigidbody2D _rb;
-    CinemachineVirtualCamera _camera;
-
-    [SerializeField] private Bomb _bombPrefab;
-    [SerializeField] private NetworkPlayerAnimator _networkAnimator;
-    [SerializeField] private PlayerWeaponHandler _weaponHandler;
-
-    private int _initialHealth = 10;
-    public int Health { get; set; }
+    public delegate void HealthSender(int healthAmount);
+    public event HealthSender OnHealthChanged;
+    public event EventHandler OnUIInstantiated;
 
     public int damageDone;
     public int enemiesKilled;
     public int bombAmount;
     public string playerName;
 
-    public delegate void HealthSender(int healthAmount);
-    public event HealthSender OnHealthChanged;
+    public static NetworkPlayer Local { get; set; }
+    public int Health { get; set; }
+    public bool IsDead { get; private set; }
+
+    private int _initialHealth = 10;
+    private NetworkRigidbody2D _rb;
+    private CinemachineVirtualCamera _camera;
+
+    [SerializeField] private GameObject _playerCanvas;
+    [SerializeField] private Bomb _bombPrefab;
+    [SerializeField] private NetworkPlayerAnimator _networkAnimator;
+    [SerializeField] private PlayerWeaponHandler _weaponHandler;
 
     public void AddBomb()
     {
@@ -44,6 +46,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             default: Health -= healthSurplus; break;
         }
         OnHealthChanged?.Invoke(Health);
+
     }
 
     private void Awake()
@@ -55,12 +58,18 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     {
         if (Object.HasInputAuthority)
         {
+            Local = this;
             _rb ??= GetComponent<NetworkRigidbody2D>();
+
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
             Health = _initialHealth;
+
             string name = Object.HasStateAuthority ? "Host" : "Client";
             RPC_UpdateName(name);
+
+            Instantiate(_playerCanvas, this.transform);
+            OnUIInstantiated?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -97,17 +106,22 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     public void Damage(int damage)
     {
-        UpdateHealth(damage, false);
-        if (Health <= 0)
+        if (!IsDead)
         {
-            Die();
+            UpdateHealth(damage, false);
+            if (Health <= 0)
+            {
+                OnPlayerDead?.Invoke(this, EventArgs.Empty);
+                RPC_Die();
+            }
         }
     }
 
     public event EventHandler OnPlayerDead;
 
-    private void Die()
+    [Rpc]
+    private void RPC_Die()
     {
-
+        IsDead = true;
     }
 }
