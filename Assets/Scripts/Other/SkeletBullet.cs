@@ -43,9 +43,9 @@ public class SkeletBullet : NetworkBehaviour
         {
             StopAllCoroutines();
             damagedObject.Damage(_damage);
-            if (Object != null)
+            if (this != null)
             {
-                Runner.Despawn(Object);
+                Destroy(gameObject);
             }
         }
     }

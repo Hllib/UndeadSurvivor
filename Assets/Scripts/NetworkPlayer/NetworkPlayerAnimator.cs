@@ -6,7 +6,8 @@ public class NetworkPlayerAnimator : NetworkBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField] private SpriteRenderer _weaponSpriteRenderer;
+    [SerializeField] private RuntimeAnimatorController[] _runtimeAnimatorControllers;
+    [SerializeField] private PlayerSkinSetter _playerSkinSetter;
     private NetworkPlayer _player;
     private PlayerStates _currentState;
 
@@ -14,6 +15,28 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     {
         _player = GetComponentInParent<NetworkPlayer>();
         _player.OnPlayerDead += OnPlayerDead;
+    }
+
+    public void UpdateAnimator(int id)
+    {
+        switch (id)
+        {
+            case 2: _animator.runtimeAnimatorController = _runtimeAnimatorControllers[1]; break;
+            case 3: _animator.runtimeAnimatorController = _runtimeAnimatorControllers[2]; break;
+            default: break;
+        }
+    }
+
+    public override void Spawned()
+    {
+        int id = PlayerPrefs.GetInt("Skin");
+        RPC_ChangeAnimator(id);
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    private void RPC_ChangeAnimator(int id)
+    {
+        _playerSkinSetter.animatorId = id;
     }
 
     private void OnPlayerDead(object sender, EventArgs e)
@@ -30,7 +53,7 @@ public class NetworkPlayerAnimator : NetworkBehaviour
 
     public enum PlayerStates
     {
-        Idle, 
+        Idle,
         Walk
     }
 
@@ -54,7 +77,7 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     [Rpc]
     public void RPC_ChooseAnimation(NetworkInputData inputData)
     {
-        if(_animator.enabled)
+        if (_animator.enabled)
         {
             if (inputData.moveDirection != Vector2.zero)
             {
@@ -72,15 +95,13 @@ public class NetworkPlayerAnimator : NetworkBehaviour
 
     private void FlipSpriteH(float horizontalMove)
     {
-        if (horizontalMove > 0) 
+        if (horizontalMove > 0)
         {
             _spriteRenderer.flipX = false;
-            _weaponSpriteRenderer.flipX = false;
         }
-        if (horizontalMove < 0) 
+        if (horizontalMove < 0)
         {
             _spriteRenderer.flipX = true;
-            _weaponSpriteRenderer.flipX = true; 
         }
     }
 }

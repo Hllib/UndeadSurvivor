@@ -115,7 +115,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            float offset = -0.3f;
+            float offset = _canWeaponFireMultiple ? -0.3f : 0f;
             for (int i = 0; i < bulletAmount; i++)
             {
                 Vector3 startPosition = new Vector3(_gunPoint.transform.position.x, _gunPoint.transform.position.y + offset, _gunPoint.transform.position.z);

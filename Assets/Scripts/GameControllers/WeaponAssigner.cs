@@ -22,7 +22,7 @@ public class WeaponAssigner : NetworkBehaviour
             int randomIndex = 0;
             do
             {
-                randomIndex = UnityEngine.Random.Range(0, _weaponVariantsSO.Length - 1);
+                randomIndex = UnityEngine.Random.Range(0, _weaponVariantsSO.Length);
             } while (usedWeapons.Contains(randomIndex));
             usedWeapons.Add(randomIndex.GetHashCode());
 

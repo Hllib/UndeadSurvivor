@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -61,15 +62,16 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            _skinSetter.UpdateSkin();
-            var skinId = _skinSetter.SkinId;
-            NetworkObject networkPlayerObject;
-            switch (skinId)
-            {
-                case 1: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
-                case 2: networkPlayerObject = runner.Spawn(_playerPrefabs[1], GetSpawnPos(), Quaternion.identity, player); break;
-                default: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
-            }
+            //_skinSetter.UpdateSkin();
+            //var skinId = _skinSetter.SkinId;
+            //NetworkObject networkPlayerObject;
+            //switch (skinId)
+            //{
+            //    case 1: networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player); break;
+            //    case 2: networkPlayerObject = runner.Spawn(_playerPrefabs[1], GetSpawnPos(), Quaternion.identity, player); break;
+            //    default: networkPlayerObject = runner.Spawn(_playerPrefabs[2], GetSpawnPos(), Quaternion.identity, player); break;
+            //}
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefabs[0], GetSpawnPos(), Quaternion.identity, player);
             spawnedCharacters.Add(player, networkPlayerObject);
         }
     }

@@ -4,10 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TMPro;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +30,9 @@ public class GameController : NetworkBehaviour
 
     private bool _isTimerOn { get; set; }
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI gameModeHeader;
+    private readonly string gameModeHeaderRest = "Mode: rest";
+    private readonly string gameModeHeaderWave = "Mode: wave";
     private float minutes { get; set; }
     private float seconds { get; set; }
 
@@ -114,11 +114,17 @@ public class GameController : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             ChooseNextRound();
-            //_collectablesSpawner.SpawnInitialWeapons();
             _gameStarted = true;
             _isTimerOn = true;
             OnGameStarted?.Invoke(this, EventArgs.Empty);
+            RPC_UpdateGameModeHeader(gameModeHeaderWave);
         }
+    }
+
+    [Rpc]
+    private void RPC_UpdateGameModeHeader(string header, RpcInfo info = default)
+    {
+        gameModeHeader.text = header;
     }
 
     public void EndGame()
@@ -173,8 +179,8 @@ public class GameController : NetworkBehaviour
         {
             switch (_gameState)
             {
-                case GameState.Rest: ChooseNextRound(); break;
-                case GameState.Round: StartRest(); SetWaveAsCompleted(); break;
+                case GameState.Rest: ChooseNextRound(); RPC_UpdateGameModeHeader(gameModeHeaderWave); break;
+                case GameState.Round: StartRest(); SetWaveAsCompleted(); RPC_UpdateGameModeHeader(gameModeHeaderRest); break;
             }
         }
     }

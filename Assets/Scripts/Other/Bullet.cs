@@ -79,7 +79,7 @@ public class Bullet : NetworkBehaviour
                 damagedObject.Damage(_damage);
                 if (Object != null)
                 {
-                    Runner.Despawn(Object);
+                    Destroy(gameObject);
                 }
             }
         }

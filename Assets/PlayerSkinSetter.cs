@@ -1,21 +1,25 @@
 using Fusion;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerSkinSetter : NetworkBehaviour
 {
-    public void UpdateSkin()
+    [Networked(OnChanged = nameof(OnAnimatorIdChanged))] public int animatorId { get; set; }
+    private NetworkPlayerAnimator _playerAnimator;
+
+    public static void OnAnimatorIdChanged(Changed<PlayerSkinSetter> changed)
     {
-        Debug.LogError("CHOSEN SKIN ID: " + PlayerPrefs.GetInt("Skin"));
-        RPC_UpdateSkinId(PlayerPrefs.GetInt("Skin"));
+        changed.Behaviour.StartCoroutine(changed.Behaviour.ChangeSkin());
     }
 
-    [Rpc]
-    private void RPC_UpdateSkinId(int skinId, RpcInfo info = default)
+    private void Start()
     {
-        SkinId = skinId;
+        _playerAnimator = GetComponent<NetworkPlayerAnimator>();
     }
 
-    public int SkinId;
+    IEnumerator ChangeSkin()
+    {
+        yield return new WaitForSeconds(0.3f);
+        _playerAnimator.UpdateAnimator(animatorId);
+    }
 }

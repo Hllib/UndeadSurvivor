@@ -89,10 +89,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         {
             _camera.Follow = playerAlive.transform;
         }
-        else
-        {
-            return;
-        }
     }
 
     [Rpc]
@@ -134,14 +130,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     {
         if (!IsDead)
         {
-            Debug.LogError("Health before damage: " + Health);
             UpdateHealth(damage, false);
-            Debug.LogError("Health after damage: " + Health);
             if (Health <= 0)
             {
                 RPC_Die();
                 OnPlayerDead?.Invoke(this, EventArgs.Empty);
-                TurnOnSpectator();
             }
         }
     }
