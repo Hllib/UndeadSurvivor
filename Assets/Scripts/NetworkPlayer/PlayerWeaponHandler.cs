@@ -17,6 +17,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
 
     private float canShoot = 0f;
     private float shootRate = 1.5f;
+    private bool _canWeaponFireMultiple;
 
     public delegate void AmmoSender(int ammoAmount);
     public event AmmoSender OnAmmoChanged;
@@ -28,7 +29,14 @@ public class PlayerWeaponHandler : NetworkBehaviour
             case true: _ammoAmount += ammoSurplus; break;
             default: _ammoAmount -= ammoSurplus; break;
         }
+        RPC_UpdateAmmoAmount(_ammoAmount);
         OnAmmoChanged?.Invoke(_ammoAmount);
+    }
+
+    [Rpc]
+    private void RPC_UpdateAmmoAmount(int ammoAmount, RpcInfo info = default)
+    {
+        _ammoAmount = ammoAmount;
     }
 
     private void Awake()
@@ -48,15 +56,24 @@ public class PlayerWeaponHandler : NetworkBehaviour
     }
 
     [Rpc]
-    public void RPC_ShowWeapon()
+    private void RPC_ShowWeapon(string spriteName, RpcInfo info = default)
     {
-        _weaponSpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Weapons/" + _weaponSO.title);
+        _weaponSpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Weapons/" + spriteName);
+    }
+
+    [Rpc]
+    private void RPC_SetFireMultiple(bool state, RpcInfo info = default)
+    {
+        _canWeaponFireMultiple = state;
     }
 
     public void AssignWeapon(WeaponScriptableObject weaponSO)
     {
         _weaponSO = weaponSO;
         _gunPoint.transform.localPosition = new Vector3(_weaponSO.shootStartPoints.X, _weaponSO.shootStartPoints.Y, 0);
+        _weaponSpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Weapons/" + _weaponSO.title);
+        RPC_SetFireMultiple(_weaponSO.canFireMultiple);
+        RPC_ShowWeapon(_weaponSO.title);
     }
 
     [Rpc]
@@ -83,7 +100,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
     [Rpc]
     public void RPC_Shoot()
     {
-        if (_weaponSO.canFireMultiple)
+        if (_canWeaponFireMultiple)
         {
             FireBullet(_multipleShootAmount);
         }

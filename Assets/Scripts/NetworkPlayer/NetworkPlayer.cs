@@ -2,12 +2,14 @@ using UnityEngine;
 using Fusion;
 using Cinemachine;
 using System;
+using System.Linq;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 {
     public delegate void HealthSender(int healthAmount);
     public event HealthSender OnHealthChanged;
     public event EventHandler OnUIInstantiated;
+    public event EventHandler OnPlayerDead;
 
     public int damageDone;
     public int enemiesKilled;
@@ -42,11 +44,17 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     {
         switch (toAdd)
         {
-            case true: Health += healthSurplus; break;
-            default: Health -= healthSurplus; break;
+            case true: Health += healthSurplus; Debug.LogError("adding health: " + healthSurplus); break;
+            default: Health -= healthSurplus; Debug.LogError("reducing health by: " + healthSurplus); break;
         }
+        RPC_UpdateHealth(Health);
         OnHealthChanged?.Invoke(Health);
+    }
 
+    [Rpc]
+    private void RPC_UpdateHealth(int healthAmount, RpcInfo info = default)
+    {
+        Health = healthAmount;
     }
 
     private void Awake()
@@ -73,6 +81,20 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         }
     }
 
+    private void TurnOnSpectator()
+    {
+        var playerObjects = GameObject.FindGameObjectsWithTag("Player");
+        var playerAlive = playerObjects.FirstOrDefault(playerObj => playerObj.GetComponent<NetworkPlayer>().IsDead == false);
+        if (playerAlive != null)
+        {
+            _camera.Follow = playerAlive.transform;
+        }
+        else
+        {
+            return;
+        }
+    }
+
     [Rpc]
     private void RPC_UpdateName(string name, RpcInfo info = default)
     {
@@ -96,6 +118,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     public override void FixedUpdateNetwork()
     {
+        if (IsDead)
+        {
+            return;
+        }
         if (GetInput(out NetworkInputData data))
         {
             _rb.Rigidbody.velocity = data.moveDirection;
@@ -111,13 +137,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             UpdateHealth(damage, false);
             if (Health <= 0)
             {
-                OnPlayerDead?.Invoke(this, EventArgs.Empty);
                 RPC_Die();
+                OnPlayerDead?.Invoke(this, EventArgs.Empty);
+                //TurnOnSpectator();
             }
         }
     }
-
-    public event EventHandler OnPlayerDead;
 
     [Rpc]
     private void RPC_Die()

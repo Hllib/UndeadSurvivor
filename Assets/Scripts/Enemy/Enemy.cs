@@ -27,6 +27,8 @@ public abstract class Enemy : NetworkBehaviour
     protected float canAttack = 0.0f;
     protected float attackRate;
     protected float attackRadius;
+    private GameController _gameController;
+    private NetworkRunner _networkRunner;
 
     [SerializeField]
     protected EnemyScriptableObject enemyScriptableObject;
@@ -35,8 +37,13 @@ public abstract class Enemy : NetworkBehaviour
     {
         this.animator = GetComponent<Animator>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
+        _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _networkRunner = GameObject.FindGameObjectWithTag("NetworkRunner").GetComponent<NetworkRunner>();
         FindPlayers();
-        this.player.OnPlayerDead += OnPlayerDead;
+        if (player != null)
+        {
+            this.player.OnPlayerDead += OnPlayerDead;
+        }
 
         SetInitialSettings();
     }
@@ -49,18 +56,19 @@ public abstract class Enemy : NetworkBehaviour
     private void FindPlayers()
     {
         var players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Any())
+        if (players.Any(player => player.GetComponent<NetworkPlayer>().IsDead == false))
         {
-            var index = UnityEngine.Random.Range(0, players.Length);
-            if(players.ElementAt(index).GetComponent<NetworkPlayer>().IsDead)
+            int index = 0;
+            do
             {
+                index = UnityEngine.Random.Range(0, players.Length);
 
-            }
-            else
-            {
-
-            }
+            } while (players.ElementAt(index).GetComponent<NetworkPlayer>().IsDead);
             this.player = players.ElementAt(index).GetComponent<NetworkPlayer>();
+        }
+        else
+        {
+            _gameController.FinishGame();
         }
     }
 
@@ -76,8 +84,14 @@ public abstract class Enemy : NetworkBehaviour
 
     public virtual void CalculateMovement()
     {
-        currentTarget = player.transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+        if (player != null)
+        {
+            if (!player.IsDead)
+            {
+                currentTarget = player.transform.position;
+                transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+            }
+        }
     }
 
     protected abstract void SetInitialSettings();
@@ -107,8 +121,11 @@ public abstract class Enemy : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        CalculateMovement();
-        CheckAttackZone();
-        CheckLookDirection();
+        if (player != null)
+        {
+            CalculateMovement();
+            CheckAttackZone();
+            CheckLookDirection();
+        }
     }
 }

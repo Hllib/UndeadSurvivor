@@ -11,6 +11,7 @@ TagManager:
   - CoverUI
   - MoveJoystick
   - ShootJoystick
+  - NetworkRunner
   layers:
   - Default
   - TransparentFX

@@ -7,10 +7,14 @@ using UnityEngine.EventSystems;
 public class EndGameButton : NetworkBehaviour, IPointerClickHandler
 {
     [SerializeField] private GameController _gameController;
+    [SerializeField] private NetworkRunnerHandler _networkRunnerHandler;
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        _gameController.EndGame();
-        Runner.Despawn(Object);
+        if(Object.HasStateAuthority)
+        {
+            Runner.Despawn(Object);
+            _gameController.EndGame();
+        }
     }
 }

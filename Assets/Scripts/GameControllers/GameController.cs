@@ -114,7 +114,7 @@ public class GameController : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             ChooseNextRound();
-            _collectablesSpawner.SpawnInitialWeapons();
+            //_collectablesSpawner.SpawnInitialWeapons();
             _gameStarted = true;
             _isTimerOn = true;
             OnGameStarted?.Invoke(this, EventArgs.Empty);
@@ -135,6 +135,7 @@ public class GameController : NetworkBehaviour
     private void StartRest()
     {
         _enemySpawner.StopSpawning();
+        _collectablesSpawner.StopSpawning();
         _gameState = GameState.Rest;
 
         SetTimer(_restTime);
@@ -183,6 +184,11 @@ public class GameController : NetworkBehaviour
         waveCompletion[_currentWaveId] = true;
     }
 
+    public void FinishGame()
+    {
+        OnGameFinished?.Invoke(this, EventArgs.Empty);
+    }
+
     private void ChooseNextRound()
     {
         var nextWave = waveCompletion.FirstOrDefault(wave => wave.Value == false);
@@ -194,7 +200,9 @@ public class GameController : NetworkBehaviour
         else
         {
             _gameStarted = false;
-            OnGameFinished?.Invoke(this, EventArgs.Empty);
+            _collectablesSpawner.StopSpawning();
+            _enemySpawner.StopSpawning();
+            FinishGame();
         }
     }
 }

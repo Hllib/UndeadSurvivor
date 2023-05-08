@@ -1,11 +1,31 @@
 using Fusion;
+using System;
 using UnityEngine;
 
 public class NetworkPlayerAnimator : NetworkBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    private NetworkPlayer _player;
     private PlayerStates _currentState;
+
+    private void Awake()
+    {
+        _player = GetComponentInParent<NetworkPlayer>();
+        _player.OnPlayerDead += OnPlayerDead;
+    }
+
+    private void OnPlayerDead(object sender, EventArgs e)
+    {
+        RPC_HidePlayer();
+    }
+
+    [Rpc]
+    private void RPC_HidePlayer()
+    {
+        _animator.enabled = false;
+        _spriteRenderer.enabled = false;
+    }
 
     public enum PlayerStates
     {
@@ -33,16 +53,19 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     [Rpc]
     public void RPC_ChooseAnimation(NetworkInputData inputData)
     {
-        if (inputData.moveDirection != Vector2.zero)
+        if(_animator.enabled)
         {
-            CurrentState = PlayerStates.Walk;
-            _animator.SetFloat("xMove", inputData.moveDirection.x);
-            _animator.SetFloat("yMove", inputData.moveDirection.y);
-            FlipSpriteH(inputData.moveDirection.x);
-        }
-        else
-        {
-            CurrentState = PlayerStates.Idle;
+            if (inputData.moveDirection != Vector2.zero)
+            {
+                CurrentState = PlayerStates.Walk;
+                _animator.SetFloat("xMove", inputData.moveDirection.x);
+                _animator.SetFloat("yMove", inputData.moveDirection.y);
+                FlipSpriteH(inputData.moveDirection.x);
+            }
+            else
+            {
+                CurrentState = PlayerStates.Idle;
+            }
         }
     }
 

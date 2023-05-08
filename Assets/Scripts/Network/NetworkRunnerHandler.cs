@@ -55,11 +55,14 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
+    [SerializeField] private PlayerSkinSetter _skinSetter;
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
         {
-            var skinId = PlayerPrefs.GetInt("Skin");
+            _skinSetter.UpdateSkin();
+            var skinId = _skinSetter.SkinId;
             NetworkObject networkPlayerObject;
             switch (skinId)
             {
@@ -112,7 +115,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void OnConnectedToServer(NetworkRunner runner)
