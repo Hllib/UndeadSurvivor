@@ -17,7 +17,7 @@ public class WeaponAssigner : NetworkBehaviour
     private void AssignWeaponsToPlayers(object sender, EventArgs e)
     {
         List<int> usedWeapons = new List<int>();
-        foreach (var playerObj in _networkRunner.spawnedCharacters.Values)
+        foreach (var playerObj in _networkRunner.SpawnedCharacters.Values)
         {
             int randomIndex = 0;
             do
