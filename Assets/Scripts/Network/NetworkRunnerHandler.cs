@@ -15,6 +15,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     [SerializeField] private GameObject _coverUI;
+    [SerializeField] private GameObject[] _spawnPoints;
 
     private void Start()
     {
@@ -49,7 +50,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = gameMode,
             Address = address,
             Scene = scene,
-            SessionName = "UndeadSurvivor",
+            //SessionName = "UndeadSurvivor", 
             Initialized = initialized,
             SceneManager = sceneObjectProvider
         });
@@ -66,15 +67,13 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     Vector3 GetSpawnPos()
     {
-        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-
-        if (spawnPoints.Length == 0)
+        if (_spawnPoints.Length == 0)
         {
             return Vector3.zero;
         }
         else
         {
-            return spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)].transform.position;
+            return _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length)].transform.position;
         }
     }
 
@@ -95,7 +94,12 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        runner.Shutdown();
+    }
 
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+    {
+        runner.Shutdown(shutdownReason: ShutdownReason.HostMigration);
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
@@ -139,11 +143,6 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
-    {
-
-    }
-
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
 
     }

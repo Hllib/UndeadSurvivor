@@ -68,8 +68,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         if (Object.HasInputAuthority)
         {
             Local = this;
-            _rb ??= GetComponent<NetworkRigidbody2D>();
-
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
             string name = Object.HasStateAuthority ? "Host" : "Client";
