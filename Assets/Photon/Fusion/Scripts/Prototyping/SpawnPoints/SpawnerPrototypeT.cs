@@ -146,7 +146,7 @@ public class SpawnerPrototype<T> : SimulationBehaviour, IPlayerJoined, IPlayerLe
     if (playerObject)
       objList.Add(playerObject);
 
-    // For AOI handling, make the player aware of its own player object in all cases.
+    // For AOI handling, make the Player aware of its own Player object in all cases.
     Runner.SetPlayerAlwaysInterested(player, playerObject, true);
   }
 

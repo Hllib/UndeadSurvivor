@@ -8,39 +8,39 @@ using UnityEngine.UI;
 
 public abstract class Enemy : NetworkBehaviour
 {
-    protected float speed;
-    protected Vector3 currentTarget;
-    protected int damage;
-    protected Animator animator;
-    protected SpriteRenderer spriteRenderer;
-    protected NetworkPlayer player;
+    protected float Speed;
+    protected Vector3 CurrentTarget;
+    protected int Damage;
+    protected Animator Animator;
+    protected SpriteRenderer SpriteRenderer;
+    protected NetworkPlayer Player;
 
-    protected bool isDead;
+    protected bool IsDead;
 
-    protected float tempSpeed;
+    protected float TempSpeed;
 
     [SerializeField]
-    protected Transform face;
+    protected Transform Face;
     [SerializeField]
-    protected Transform back;
+    protected Transform Back;
 
-    protected float canAttack = 0.0f;
-    protected float attackRate;
-    protected float attackRadius;
+    protected float CanAttack = 0.0f;
+    protected float AttackRate;
+    protected float AttackRadius;
     private GameController _gameController;
 
     [SerializeField]
-    protected EnemyScriptableObject enemyScriptableObject;
+    protected EnemyScriptableObject EnemyScriptableObject;
 
     protected virtual void Init()
     {
-        this.animator = GetComponent<Animator>();
-        this.spriteRenderer = GetComponent<SpriteRenderer>();
+        this.Animator = GetComponent<Animator>();
+        this.SpriteRenderer = GetComponent<SpriteRenderer>();
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         FindPlayers();
-        if (player != null)
+        if (Player != null)
         {
-            this.player.OnPlayerDead += OnPlayerDead;
+            this.Player.OnPlayerDead += OnPlayerDead;
         }
 
         SetInitialSettings();
@@ -62,7 +62,7 @@ public abstract class Enemy : NetworkBehaviour
                 index = UnityEngine.Random.Range(0, players.Length);
 
             } while (players.ElementAt(index).GetComponent<NetworkPlayer>().IsDead);
-            this.player = players.ElementAt(index).GetComponent<NetworkPlayer>();
+            this.Player = players.ElementAt(index).GetComponent<NetworkPlayer>();
         }
         else
         {
@@ -82,12 +82,12 @@ public abstract class Enemy : NetworkBehaviour
 
     public virtual void CalculateMovement()
     {
-        if (player != null)
+        if (Player != null)
         {
-            if (!player.IsDead)
+            if (!Player.IsDead)
             {
-                currentTarget = player.transform.position;
-                transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+                CurrentTarget = Player.transform.position;
+                transform.position = Vector3.MoveTowards(transform.position, CurrentTarget, Speed * Time.deltaTime);
             }
         }
     }
@@ -96,11 +96,11 @@ public abstract class Enemy : NetworkBehaviour
 
     protected virtual void CheckAttackZone()
     {
-        float distance = Vector3.Distance(this.transform.localPosition, player.transform.localPosition);
-        if (distance < attackRadius && Time.time > canAttack)
+        float distance = Vector3.Distance(this.transform.localPosition, Player.transform.localPosition);
+        if (distance < AttackRadius && Time.time > CanAttack)
         {
             Attack();
-            canAttack = Time.time + attackRate;
+            CanAttack = Time.time + AttackRate;
         }
     }
 
@@ -108,8 +108,8 @@ public abstract class Enemy : NetworkBehaviour
 
     public virtual void CheckLookDirection()
     {
-        float faceToTargetDistance = MathF.Abs(currentTarget.x - face.position.x);
-        float backToTargetDistance = MathF.Abs(currentTarget.x - back.position.x);
+        float faceToTargetDistance = MathF.Abs(CurrentTarget.x - Face.position.x);
+        float backToTargetDistance = MathF.Abs(CurrentTarget.x - Back.position.x);
 
         if (faceToTargetDistance > backToTargetDistance)
         {
@@ -119,7 +119,7 @@ public abstract class Enemy : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (player != null)
+        if (Player != null)
         {
             CalculateMovement();
             CheckAttackZone();

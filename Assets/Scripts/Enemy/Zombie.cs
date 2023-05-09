@@ -9,18 +9,18 @@ public class Zombie : Enemy, IDamageable
 
     protected override void SetInitialSettings()
     {
-        currentAI = enemyScriptableObject;
+        currentAI = EnemyScriptableObject;
 
-        speed = currentAI.speed;
-        attackRadius = currentAI.attackRadius;
-        attackRate = currentAI.attackRate;
-        damage = currentAI.damage;  
+        Speed = currentAI.speed;
+        AttackRadius = currentAI.attackRadius;
+        AttackRate = currentAI.attackRate;
+        base.Damage = currentAI.damage;  
         Health = currentAI.health;
     }
 
     protected override void Attack()
     {
-        player.Damage(currentAI.damage);
+        Player.Damage(currentAI.damage);
     }
 
     public void Damage(int damage)

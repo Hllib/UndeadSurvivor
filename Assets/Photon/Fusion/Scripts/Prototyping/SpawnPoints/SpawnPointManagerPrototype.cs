@@ -9,7 +9,7 @@ using Fusion.Editor;
 
 /// <summary>
 /// Derive from this class for different <see cref="ISpawnPointPrototype"/> types. 
-/// Derived manager will only find that spawn point type, allowing for separate handling of player spawn points from other spawn-able items such as AI.
+/// Derived manager will only find that spawn point type, allowing for separate handling of Player spawn points from other spawn-able items such as AI.
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [ScriptHelp(BackColor = EditorHeaderBackColor.Steel)]

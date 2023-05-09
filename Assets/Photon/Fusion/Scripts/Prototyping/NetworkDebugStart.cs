@@ -63,7 +63,7 @@ public class NetworkDebugStart : Fusion.Behaviour {
 
   /// <summary>
   /// When <see cref="StartMode"/> is set to <see cref="StartModes.Automatic"/>, this option selects if the <see cref="NetworkRunner"/> 
-  /// will be started as a dedicated server, or as a host (which is a server with a local player).
+  /// will be started as a dedicated server, or as a host (which is a server with a local Player).
   /// </summary>
   [InlineHelp]
   [UnityEngine.Serialization.FormerlySerializedAs("Server")]
@@ -243,7 +243,7 @@ public class NetworkDebugStart : Fusion.Behaviour {
   }
 
   /// <summary>
-  /// Start a single player instance.
+  /// Start a single Player instance.
   /// </summary>
   [BehaviourButtonAction(nameof(StartSinglePlayer), true, false, conditionMember: nameof(IsShutdown))]
   public virtual void StartSinglePlayer() {
@@ -264,7 +264,7 @@ public class NetworkDebugStart : Fusion.Behaviour {
   }
 
   /// <summary>
-  /// Start a host instance. This is a server instance, with a local player.
+  /// Start a host instance. This is a server instance, with a local Player.
   /// </summary>
   [BehaviourButtonAction(nameof(StartHost), true, false, conditionMember: nameof(IsShutdown))]
   public virtual void StartHost() {
@@ -333,7 +333,7 @@ public class NetworkDebugStart : Fusion.Behaviour {
   }
 
   /// <summary>
-  /// Start a Fusion host instance (server with local player), and the indicated number of additional client instances. 
+  /// Start a Fusion host instance (server with local Player), and the indicated number of additional client instances. 
   /// InstanceMode must be set to Multi-Peer mode, as this requires multiple <see cref="NetworkRunner"/> instances.
   /// </summary>
   public void StartHostPlusClients(int clientCount) {
@@ -347,7 +347,7 @@ public class NetworkDebugStart : Fusion.Behaviour {
   }
 
   /// <summary>
-  /// Start a Fusion host instance (server with local player), and the indicated number of additional client instances. 
+  /// Start a Fusion host instance (server with local Player), and the indicated number of additional client instances. 
   /// InstanceMode must be set to Multi-Peer mode, as this requires multiple <see cref="NetworkRunner"/> instances.
   /// </summary>
   public void StartMultipleClients(int clientCount) {

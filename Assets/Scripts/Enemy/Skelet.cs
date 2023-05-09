@@ -24,19 +24,19 @@ public class Skelet : Enemy, IDamageable
 
     protected override void SetInitialSettings()
     {
-        currentAI = enemyScriptableObject;
+        currentAI = EnemyScriptableObject;
 
-        speed = currentAI.speed;
+        Speed = currentAI.speed;
         Health = currentAI.health;
 
-        attackRadius = currentAI.attackRadius;
-        attackRate = currentAI.attackRate;
-        damage = currentAI.damage;
+        AttackRadius = currentAI.attackRadius;
+        AttackRate = currentAI.attackRate;
+        base.Damage = currentAI.damage;
     }
 
     protected override void Attack()
     {
-        Vector2 shootDirection = (player.transform.position - transform.position).normalized;
+        Vector2 shootDirection = (Player.transform.position - transform.position).normalized;
         float aimAngle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
         _firePoint.eulerAngles = new Vector3(0, 0, aimAngle);
 
@@ -54,14 +54,14 @@ public class Skelet : Enemy, IDamageable
     public override void CalculateMovement()
     {
         base.CalculateMovement();
-        float distance = Vector3.Distance(this.transform.localPosition, player.transform.localPosition);
-        if (distance <= this.attackRadius)
+        float distance = Vector3.Distance(this.transform.localPosition, Player.transform.localPosition);
+        if (distance <= this.AttackRadius)
         {
-            speed = 0;
+            Speed = 0;
         }
         else
         {
-            speed = currentAI.speed;
+            Speed = currentAI.speed;
         }
     }
 }
