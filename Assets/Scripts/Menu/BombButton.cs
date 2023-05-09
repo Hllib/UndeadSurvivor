@@ -14,7 +14,7 @@ public class BombButton : NetworkBehaviour
 
     public void DropBomb()
     {
-        if (_player.bombAmount > 0)
+        if (_player.BombAmount > 0)
         {
             _player.RPC_DropBomb();
         }

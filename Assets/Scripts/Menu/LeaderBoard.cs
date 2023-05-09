@@ -27,10 +27,10 @@ public class LeaderBoard : NetworkBehaviour
     private string GetStats()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        foreach (var keyValuePairPlayer in _runnerHandler.spawnedCharacters)
+        foreach (var keyValuePairPlayer in _runnerHandler.SpawnedCharacters)
         {
             var player = keyValuePairPlayer.Value.GetComponent<NetworkPlayer>();
-            string playerStat = string.Format("Player name: {0}\n Kills: {1}\n Damage: {2}\n", player.playerName, player.enemiesKilled, player.damageDone);
+            string playerStat = string.Format("Player name: {0}\n Kills: {1}\n Damage: {2}\n", player.PlayerName, player.EnemiesKilled, player.DamageDone);
             stringBuilder.AppendLine(playerStat);
             stringBuilder.AppendLine("**************************");
         } 

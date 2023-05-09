@@ -13,7 +13,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _networkRunner;
     private NetworkInputHandler _playerInputHandler;
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public Dictionary<PlayerRef, NetworkObject> SpawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     [SerializeField] private GameObject _coverUI;
     [SerializeField] private GameObject[] _spawnPoints;
 
@@ -61,7 +61,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         {
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, GetSpawnPos(), Quaternion.identity, player);
-            spawnedCharacters.Add(player, networkPlayerObject);
+            SpawnedCharacters.Add(player, networkPlayerObject);
         }
     }
 
