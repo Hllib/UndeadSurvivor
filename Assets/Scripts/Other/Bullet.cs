@@ -10,7 +10,7 @@ public class Bullet : NetworkBehaviour
     private float _speed;
     private bool _hasValuesAssigned;
     private Vector3 _direction;
-    NetworkPlayer _player;
+    private NetworkPlayer _player;
 
     public override void FixedUpdateNetwork()
     {

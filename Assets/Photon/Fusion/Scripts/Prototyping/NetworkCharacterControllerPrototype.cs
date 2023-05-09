@@ -80,8 +80,8 @@ public class NetworkCharacterControllerPrototype : NetworkTransform {
   }
 
   /// <summary>
-  /// Basic implementation of a character controller's movement function based on an intended moveDirection.
-  /// <param name="direction">Intended movement moveDirection, subject to movement query, acceleration and max Speed values.</param>
+  /// Basic implementation of a character controller's movement function based on an intended MoveDirection.
+  /// <param name="direction">Intended movement MoveDirection, subject to movement query, acceleration and max Speed values.</param>
   /// </summary>
   public virtual void Move(Vector3 direction) {
     var deltaTime    = Runner.DeltaTime;

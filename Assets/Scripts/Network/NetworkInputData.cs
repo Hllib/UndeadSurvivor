@@ -5,7 +5,7 @@ using Fusion;
 
 public struct NetworkInputData : INetworkInput
 {
-    public Vector2 moveDirection;
-    public Vector2 shootDirection;
-    public bool canShoot;
+    public Vector2 MoveDirection;
+    public Vector2 ShootDirection;
+    public bool CanShoot;
 }

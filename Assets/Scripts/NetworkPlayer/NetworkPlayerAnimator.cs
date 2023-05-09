@@ -95,12 +95,12 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     {
         if (_animator.enabled)
         {
-            if (inputData.moveDirection != Vector2.zero)
+            if (inputData.MoveDirection != Vector2.zero)
             {
                 CurrentState = PlayerStates.Walk;
-                _animator.SetFloat("xMove", inputData.moveDirection.x);
-                _animator.SetFloat("yMove", inputData.moveDirection.y);
-                FlipSpriteH(inputData.moveDirection.x);
+                _animator.SetFloat("xMove", inputData.MoveDirection.x);
+                _animator.SetFloat("yMove", inputData.MoveDirection.y);
+                FlipSpriteH(inputData.MoveDirection.x);
             }
             else
             {

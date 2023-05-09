@@ -87,7 +87,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         if (_playerInputHandler != null)
         {
             var inputData = _playerInputHandler.GetNetworkInput();
-            inputData.canShoot = (inputData.shootDirection.x != 0 || inputData.shootDirection.y != 0) ? true : false;
+            inputData.CanShoot = (inputData.ShootDirection.x != 0 || inputData.ShootDirection.y != 0) ? true : false;
             input.Set(inputData);
         }
     }

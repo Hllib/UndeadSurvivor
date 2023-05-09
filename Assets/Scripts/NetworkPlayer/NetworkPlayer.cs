@@ -119,7 +119,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         }
         if (GetInput(out NetworkInputData data))
         {
-            _rb.Rigidbody.velocity = data.moveDirection;
+            _rb.Rigidbody.velocity = data.MoveDirection;
             _networkAnimator.RPC_ChooseAnimation(data);
             _weaponHandler.RPC_Aim(data);
         }

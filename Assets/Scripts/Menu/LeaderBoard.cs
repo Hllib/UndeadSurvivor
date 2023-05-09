@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class LeaderBoard : NetworkBehaviour
 {
-    public TextMeshProUGUI statsTMP;
+    public TextMeshProUGUI StatsTMP;
     private GameController _gameController;
     private NetworkRunnerHandler _runnerHandler;
     [SerializeField] private GameObject _leaderBoardPanel;
 
-    public string statistics { get; set; }
+    public string Statistics { get; set; }
 
     private void Awake()
     {
@@ -40,7 +40,7 @@ public class LeaderBoard : NetworkBehaviour
     [Rpc]
     private void RPC_UpdateStats(string stats, RpcInfo info = default)
     {
-        statistics = stats;
+        Statistics = stats;
         _leaderBoardPanel.SetActive(true);
         RPC_UpdateStatTMP(stats);
     }
@@ -48,13 +48,13 @@ public class LeaderBoard : NetworkBehaviour
     [Rpc]
     private void RPC_UpdateStatTMP(string stats, RpcInfo info = default)
     {
-        statsTMP.text = stats;
+        StatsTMP.text = stats;
     }
 
     public static void OnStatsSet(Changed<LeaderBoard> changed)
     {
         var leaderBoard = changed.Behaviour;
-        leaderBoard.statsTMP.text = leaderBoard.statistics;
+        leaderBoard.StatsTMP.text = leaderBoard.Statistics;
         leaderBoard._leaderBoardPanel.SetActive(true);
     }
 

@@ -87,7 +87,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
     [Rpc]
     public void RPC_Aim(NetworkInputData inputData)
     {
-        Vector2 shootDirection = inputData.shootDirection;
+        Vector2 shootDirection = inputData.ShootDirection;
         float aimAngle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
         _aimTransform.eulerAngles = new Vector3(0, 0, aimAngle);
 
@@ -95,7 +95,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
         aimLocalScale.y = (aimAngle > 90 || aimAngle < -90) ? -1f : 1f;
         _aimTransform.localScale = aimLocalScale;
 
-        if (_weaponSO != null && inputData.canShoot)
+        if (_weaponSO != null && inputData.CanShoot)
         {
             if (Time.time > _canShoot && _ammoAmount > 0)
             {

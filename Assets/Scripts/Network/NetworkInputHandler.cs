@@ -27,8 +27,8 @@ public class NetworkInputHandler : MonoBehaviour
         NetworkInputData data = new NetworkInputData();
         if (moveJoystick != null && shootJoystick != null)
         {
-            data.moveDirection = Vector2.up * moveJoystick.Vertical * _speed + Vector2.right * moveJoystick.Horizontal * _speed;
-            data.shootDirection = Vector2.up * shootJoystick.Vertical + Vector2.right * shootJoystick.Horizontal;
+            data.MoveDirection = Vector2.up * moveJoystick.Vertical * _speed + Vector2.right * moveJoystick.Horizontal * _speed;
+            data.ShootDirection = Vector2.up * shootJoystick.Vertical + Vector2.right * shootJoystick.Horizontal;
         }
 
         return data;

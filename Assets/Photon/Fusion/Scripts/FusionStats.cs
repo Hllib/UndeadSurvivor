@@ -89,8 +89,8 @@ public class FusionStats : Fusion.Behaviour {
   /// <param name="runner"></param>
   /// <param name="parent">Generated FusionStats component and GameObject will be added as a child of this transform.</param>
   /// <param name="objectLayout">Uses a predefined position.</param>
-  /// <param name="netStatsMask">The network stats to be enabled. If left null, default statistics will be used.</param>
-  /// <param name="simStatsMask">The simulation stats to be enabled. If left null, default statistics will be used.</param>
+  /// <param name="netStatsMask">The network stats to be enabled. If left null, default Statistics will be used.</param>
+  /// <param name="simStatsMask">The simulation stats to be enabled. If left null, default Statistics will be used.</param>
   /// <returns></returns>
   public static FusionStats Create(Transform parent = null, NetworkRunner runner = null, DefaultLayouts? screenLayout = null, DefaultLayouts? objectLayout = null, Stats.NetStatFlags? netStatsMask = null, Stats.SimStatFlags? simStatsMask = null) {
 

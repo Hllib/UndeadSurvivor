@@ -26,11 +26,11 @@ public class GameController : NetworkBehaviour
     private int _currentWaveId;
 
     [Networked(OnChanged = nameof(OnTimerChanged))]
-    public float timeLeft { get; set; }
+    public float TimeLeft { get; set; }
 
     private bool _isTimerOn { get; set; }
-    public TextMeshProUGUI timerText;
-    public TextMeshProUGUI gameModeHeader;
+    public TextMeshProUGUI TimerText;
+    public TextMeshProUGUI GameModeHeader;
     private readonly string gameModeHeaderRest = "Mode: rest";
     private readonly string gameModeHeaderWave = "Mode: wave";
     private float minutes { get; set; }
@@ -40,13 +40,13 @@ public class GameController : NetworkBehaviour
     {
         if (Object != null && _isTimerOn)
         {
-            if (timeLeft > 0)
+            if (TimeLeft > 0)
             {
-                timeLeft -= Time.deltaTime;
+                TimeLeft -= Time.deltaTime;
             }
             else
             {
-                timeLeft = 0;
+                TimeLeft = 0;
                 _isTimerOn = false;
             }
         }
@@ -55,12 +55,12 @@ public class GameController : NetworkBehaviour
     public static void OnTimerChanged(Changed<GameController> changed)
     {
         var gameController = changed.Behaviour;
-        var currentTime = gameController.timeLeft + 1;
+        var currentTime = gameController.TimeLeft + 1;
 
         gameController.minutes = Mathf.FloorToInt(currentTime / 60);
         gameController.seconds = Mathf.FloorToInt(currentTime % 60);
 
-        gameController.timerText.text = string.Format("{0:00} : {1:00}", gameController.minutes, gameController.seconds);
+        gameController.TimerText.text = string.Format("{0:00} : {1:00}", gameController.minutes, gameController.seconds);
     }
 
     enum GameState
@@ -111,7 +111,7 @@ public class GameController : NetworkBehaviour
     [Rpc]
     private void RPC_UpdateGameModeHeader(string header, RpcInfo info = default)
     {
-        gameModeHeader.text = header;
+        GameModeHeader.text = header;
     }
 
     public void EndGame()
@@ -121,7 +121,7 @@ public class GameController : NetworkBehaviour
 
     private void SetTimer(float seconds)
     {
-        timeLeft = seconds;
+        TimeLeft = seconds;
         _isTimerOn = true;
     }
 
