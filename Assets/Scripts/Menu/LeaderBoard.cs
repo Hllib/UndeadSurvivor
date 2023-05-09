@@ -8,16 +8,20 @@ public class LeaderBoard : NetworkBehaviour
 {
     public TextMeshProUGUI statsTMP;
     private GameController _gameController;
-    [SerializeField] private NetworkRunnerHandler _runnerHandler;
+    private NetworkRunnerHandler _runnerHandler;
     [SerializeField] private GameObject _leaderBoardPanel;
 
-    //[Networked(OnChanged = nameof(OnStatsSet))]
     public string statistics { get; set; }
 
     private void Awake()
     {
         _gameController = GetComponent<GameController>();
         _gameController.OnGameFinished += CreateLeaderBoard;
+    }
+
+    public override void Spawned()
+    {
+        _runnerHandler = Runner.GetComponent<NetworkRunnerHandler>();
     }
 
     private string GetStats()

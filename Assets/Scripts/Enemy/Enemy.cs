@@ -28,7 +28,6 @@ public abstract class Enemy : NetworkBehaviour
     protected float attackRate;
     protected float attackRadius;
     private GameController _gameController;
-    private NetworkRunner _networkRunner;
 
     [SerializeField]
     protected EnemyScriptableObject enemyScriptableObject;
@@ -38,7 +37,6 @@ public abstract class Enemy : NetworkBehaviour
         this.animator = GetComponent<Animator>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        _networkRunner = GameObject.FindGameObjectWithTag("NetworkRunner").GetComponent<NetworkRunner>();
         FindPlayers();
         if (player != null)
         {

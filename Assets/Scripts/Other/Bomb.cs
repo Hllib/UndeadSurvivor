@@ -1,7 +1,6 @@
 using Fusion;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bomb : NetworkBehaviour
@@ -25,7 +24,6 @@ public class Bomb : NetworkBehaviour
 
             if (hit != null)
             {
-                Debug.Log(collision.name);
                 hit.Damage(_explosionDamage);
             }
         }

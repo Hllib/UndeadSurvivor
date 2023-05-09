@@ -7,7 +7,12 @@ using UnityEngine.EventSystems;
 public class EndGameButton : NetworkBehaviour, IPointerClickHandler
 {
     [SerializeField] private GameController _gameController;
-    [SerializeField] private NetworkRunnerHandler _networkRunnerHandler;
+    private NetworkRunnerHandler _networkRunnerHandler;
+
+    public override void Spawned()
+    {
+        _networkRunnerHandler = Runner.GetComponent<NetworkRunnerHandler>();    
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
