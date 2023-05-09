@@ -97,6 +97,11 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         runner.Shutdown();
     }
 
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+    {
+        runner.Shutdown(shutdownReason: ShutdownReason.HostMigration);
+    }
+
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
     {
 
@@ -138,11 +143,6 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
-    {
-
-    }
-
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
 
     }

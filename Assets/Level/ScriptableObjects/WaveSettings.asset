@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5127f0fb914bde499366cda5da4f7e0, type: 3}
   m_Name: WaveSettings
   m_EditorClassIdentifier: 
-  wave1Duration: 5
-  wave2Duration: 5
-  wave3Duration: 5
-  restTime: 5
+  wave1Duration: 60
+  wave2Duration: 180
+  wave3Duration: 300
+  restTime: 30
