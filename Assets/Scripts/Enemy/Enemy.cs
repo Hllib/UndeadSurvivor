@@ -1,10 +1,7 @@
 using Fusion;
 using System;
-using System.Collections;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public abstract class Enemy : NetworkBehaviour
 {
