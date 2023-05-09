@@ -50,9 +50,9 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = gameMode,
             Address = address,
             Scene = scene,
-            //SessionName = "UndeadSurvivor", 
             Initialized = initialized,
-            SceneManager = sceneObjectProvider
+            SceneManager = sceneObjectProvider,
+            PlayerCount = 2
         });
     }
 
