@@ -31,7 +31,7 @@ public class Skelet : Enemy, IDamageable
 
         AttackRadius = _currentAI.attackRadius;
         AttackRate = _currentAI.attackRate;
-        base.Damage = _currentAI.damage;
+        base.DamageDone = _currentAI.damage;
     }
 
     protected override void Attack()

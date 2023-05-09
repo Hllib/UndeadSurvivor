@@ -10,7 +10,7 @@ public abstract class Enemy : NetworkBehaviour
 {
     protected float Speed;
     protected Vector3 CurrentTarget;
-    protected int Damage;
+    protected int DamageDone;
     protected Animator Animator;
     protected SpriteRenderer SpriteRenderer;
     protected NetworkPlayer Player;

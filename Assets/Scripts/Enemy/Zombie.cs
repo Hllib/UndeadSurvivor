@@ -14,7 +14,7 @@ public class Zombie : Enemy, IDamageable
         Speed = currentAI.speed;
         AttackRadius = currentAI.attackRadius;
         AttackRate = currentAI.attackRate;
-        base.Damage = currentAI.damage;  
+        base.DamageDone = currentAI.damage;  
         Health = currentAI.health;
     }
 
