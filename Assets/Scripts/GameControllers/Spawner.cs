@@ -81,7 +81,7 @@ public class Spawner : NetworkBehaviour
         {
             yield return new WaitForSeconds(_spawnDelay);
             int[] enemyVariants = new int[] { (int)ObjectType.Object1, (int)ObjectType.Object3 };
-            SpawnEnemy((ObjectType)Enum.ToObject(typeof(ObjectType), UnityEngine.Random.Range(enemyVariants[0], enemyVariants[enemyVariants.Length - 1] + 1)));
+            SpawnEnemy((ObjectType)Enum.ToObject(typeof(ObjectType), UnityEngine.Random.Range(enemyVariants[0], enemyVariants[enemyVariants.Length - 1])));
         }
     }
 

@@ -28,6 +28,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [SerializeField] private Bomb _bombPrefab;
     [SerializeField] private NetworkPlayerAnimator _networkAnimator;
     [SerializeField] private PlayerWeaponHandler _weaponHandler;
+    private GameObject _canvas;
 
     public void AddBomb()
     {
@@ -71,10 +72,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
             _camera = GameObject.FindGameObjectWithTag("VCam").GetComponent<CinemachineVirtualCamera>();
             _camera.Follow = this.transform;
-
             string name = Object.HasStateAuthority ? "Host" : "Client";
             RPC_UpdateName(name);
-            Instantiate(_playerCanvas, this.transform);
+            _canvas = Instantiate(_playerCanvas, this.transform);
             OnUIInstantiated?.Invoke(this, EventArgs.Empty);
         }
         RPC_UpdateHealth(_initialHealth);
@@ -82,11 +82,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     private void TurnOnSpectator()
     {
-        var playerObjects = GameObject.FindGameObjectsWithTag("Player");
-        var playerAlive = playerObjects.FirstOrDefault(playerObj => playerObj.GetComponent<NetworkPlayer>().IsDead == false);
-        if (playerAlive != null)
+        if(HasInputAuthority)
         {
-            _camera.Follow = playerAlive.transform;
+            _canvas.SetActive(false);
+            CinemachineVirtualCamera spectatorCamera = GameObject.FindGameObjectWithTag("SpectatorCamera").GetComponent<CinemachineVirtualCamera>();
+            _camera.Follow = spectatorCamera.Follow;
+            _camera.transform.position = spectatorCamera.transform.position;
+            _camera.transform.rotation = spectatorCamera.transform.rotation;
         }
     }
 

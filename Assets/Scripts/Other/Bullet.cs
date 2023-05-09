@@ -28,7 +28,7 @@ public class Bullet : NetworkBehaviour
     IEnumerator DestroyBullet()
     {
         yield return new WaitForSeconds(1.5f);
-        Runner.Despawn(Object);
+        Destroy(gameObject);
     }
 
     private void SetSpeed(float speed)
