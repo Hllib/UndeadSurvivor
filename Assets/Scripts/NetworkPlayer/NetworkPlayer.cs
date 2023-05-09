@@ -11,10 +11,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     public event EventHandler OnUIInstantiated;
     public event EventHandler OnPlayerDead;
 
-    public int DamageDone;
-    public int EnemiesKilled;
-    public int BombAmount;
-    public string PlayerName;
+    private int _damageDone;
+    private int _enemiesKilled;
+    private int _bombAmount;
+    private string _playerName;
+
+    public int DamageDone => _damageDone;
+    public int EnemiesKilled => _enemiesKilled;
+    public int BombAmount => _bombAmount;
+    public string PlayerName => _playerName;
 
     public static NetworkPlayer Local { get; set; }
     public int Health { get; set; }
@@ -32,13 +37,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
 
     public void AddBomb()
     {
-        BombAmount += 1;
+        _bombAmount += 1;
     }
 
     public void UpdateScore(int damageDoneSurplus, int enemiesKilledSurplus)
     {
-        DamageDone += damageDoneSurplus;
-        EnemiesKilled += enemiesKilledSurplus;
+        _damageDone += damageDoneSurplus;
+        _enemiesKilled += enemiesKilledSurplus;
     }
 
     public void UpdateHealth(int healthSurplus, bool toAdd)
@@ -93,7 +98,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [Rpc]
     private void RPC_UpdateName(string name, RpcInfo info = default)
     {
-        PlayerName = name;
+        _playerName = name;
     }
 
     public void PlayerLeft(PlayerRef player)
@@ -107,7 +112,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [Rpc]
     public void RPC_DropBomb(RpcInfo info = default)
     {
-        BombAmount -= 1;
+        _bombAmount -= 1;
         Runner.Spawn(_bombPrefab, transform.position, Quaternion.identity, Object.InputAuthority);
     }
 
