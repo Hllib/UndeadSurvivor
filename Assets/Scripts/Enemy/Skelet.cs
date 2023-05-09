@@ -11,7 +11,7 @@ public class Skelet : Enemy, IDamageable
     private float canShoot = 0f;
     private float shootRate = 1.5f;
 
-    EnemyScriptableObject currentAI;
+    private EnemyScriptableObject _currentAI;
 
     public void Damage(int damage)
     {
@@ -24,20 +24,17 @@ public class Skelet : Enemy, IDamageable
 
     protected override void SetInitialSettings()
     {
-        currentAI = EnemyScriptableObject;
+        _currentAI = EnemyScriptableObject;
 
-        Speed = currentAI.speed;
-        Health = currentAI.health;
+        Speed = _currentAI.speed;
+        Health = _currentAI.health;
 
-<<<<<<< HEAD
         AttackRadius = _currentAI.attackRadius;
         AttackRate = _currentAI.attackRate;
         base.DamageDone = _currentAI.damage;
-=======
-        AttackRadius = currentAI.attackRadius;
-        AttackRate = currentAI.attackRate;
-        base.Damage = currentAI.damage;
->>>>>>> parent of a5b0a4c (naming refactoring)
+        AttackRadius = _currentAI.attackRadius;
+        AttackRate = _currentAI.attackRate;
+        base.DamageDone = _currentAI.damage;
     }
 
     protected override void Attack()
@@ -51,7 +48,7 @@ public class Skelet : Enemy, IDamageable
             if(Object.HasStateAuthority)
             {
                 var bullet = Runner.Spawn(_bulletPrefab, _firePoint.transform.position, Quaternion.identity);
-                bullet.GetComponent<SkeletBullet>().AssignData(currentAI.damage, _firePoint.transform.right);
+                bullet.GetComponent<SkeletBullet>().AssignData(_currentAI.damage, _firePoint.transform.right);
                 canShoot = Time.time + shootRate;
             }
         }
@@ -67,7 +64,7 @@ public class Skelet : Enemy, IDamageable
         }
         else
         {
-            Speed = currentAI.speed;
+            Speed = _currentAI.speed;
         }
     }
 }
