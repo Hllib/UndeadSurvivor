@@ -211,9 +211,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  face: {fileID: 3847193392995367726}
-  back: {fileID: 3847193391446336389}
-  enemyScriptableObject: {fileID: 11400000, guid: 18bc4acd7b2e97e41af2e0f74e990ec2, type: 2}
+  Face: {fileID: 3847193392995367726}
+  Back: {fileID: 3847193391446336389}
+  EnemyScriptableObject: {fileID: 11400000, guid: 18bc4acd7b2e97e41af2e0f74e990ec2, type: 2}
   _bulletPrefab: {fileID: 7306104787821188468, guid: e0437a588215fe14e98343991362cfe7, type: 3}
   _firePoint: {fileID: 6578304941950926472}
 --- !u!114 &4902610111282848754

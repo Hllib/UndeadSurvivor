@@ -2843,7 +2843,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1630701273}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.4069753, y: -1.3395841, z: -21.781218}
+  m_LocalPosition: {x: -3.7826238, y: -1.367285, z: -21.781218}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8152,9 +8152,9 @@ MonoBehaviour:
   _enemySpawner: {fileID: 1103462783}
   _collectablesSpawner: {fileID: 115955833}
   _waveSettingSO: {fileID: 11400000, guid: 8f021147965f67542ba71d49d04f038e, type: 2}
-  _timeLeft: 0
-  timerText: {fileID: 1806785950}
-  gameModeHeader: {fileID: 807069955}
+  _TimeLeft: 0
+  TimerText: {fileID: 1806785950}
+  GameModeHeader: {fileID: 807069955}
 --- !u!114 &2055805516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8193,8 +8193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  statsTMP: {fileID: 916992309}
-  _runnerHandler: {fileID: 134967450}
+  StatsTMP: {fileID: 0}
   _leaderBoardPanel: {fileID: 412895928}
 --- !u!1 &2057441619
 GameObject:

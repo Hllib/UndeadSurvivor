@@ -80,9 +80,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  face: {fileID: 1985057674686526209}
-  back: {fileID: 1985057676233419690}
-  enemyScriptableObject: {fileID: 11400000, guid: 262ddc4055ca3cf4e99bd55710e2b94e, type: 2}
+  Face: {fileID: 1985057674686526209}
+  Back: {fileID: 1985057676233419690}
+  EnemyScriptableObject: {fileID: 11400000, guid: 262ddc4055ca3cf4e99bd55710e2b94e, type: 2}
 --- !u!61 &1985057675656465798
 BoxCollider2D:
   m_ObjectHideFlags: 0
