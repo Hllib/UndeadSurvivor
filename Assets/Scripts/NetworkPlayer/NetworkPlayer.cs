@@ -134,6 +134,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
             {
                 RPC_Die();
                 OnPlayerDead?.Invoke(this, EventArgs.Empty);
+                TurnOnSpectator();
             }
         }
     }

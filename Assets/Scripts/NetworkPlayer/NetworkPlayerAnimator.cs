@@ -8,9 +8,10 @@ public class NetworkPlayerAnimator : NetworkBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private RuntimeAnimatorController[] _runtimeAnimatorControllers;
-    [Networked(OnChanged = nameof(OnAnimatorIdChanged))] public int animatorId { get; set; }
     private NetworkPlayer _player;
     private PlayerStates _currentState;
+
+    [Networked(OnChanged = nameof(OnAnimatorIdChanged))] public int animatorId { get; set; }
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class NetworkPlayerAnimator : NetworkBehaviour
 
     IEnumerator ChangeSkin()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
         UpdateAnimator(animatorId);
     }
 

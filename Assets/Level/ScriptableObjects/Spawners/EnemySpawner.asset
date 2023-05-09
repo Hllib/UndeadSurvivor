@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5127f0fb914bde499366cda5da4f7e0, type: 3}
-  m_Name: WaveSettings
+  m_Script: {fileID: 11500000, guid: c899835addd8085408e34ddd5ab0af0c, type: 3}
+  m_Name: EnemySpawner
   m_EditorClassIdentifier: 
-  wave1Duration: 30
-  wave2Duration: 30
-  wave3Duration: 300
-  restTime: 30
+  spawnObjects:
+  - RawGuidValue: 4949c232127c1194cacc8ba39ade1948
+  - RawGuidValue: ea0e8af694e83ed428f78c05bddd7d32
+  - RawGuidValue: 1276af2e1682f784691327a6627d701d
+  spawnDelay: 3.5

@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5127f0fb914bde499366cda5da4f7e0, type: 3}
-  m_Name: WaveSettings
+  m_Script: {fileID: 11500000, guid: c899835addd8085408e34ddd5ab0af0c, type: 3}
+  m_Name: CollectableSpawner
   m_EditorClassIdentifier: 
-  wave1Duration: 30
-  wave2Duration: 30
-  wave3Duration: 300
-  restTime: 30
+  spawnObjects:
+  - RawGuidValue: 22df4d631c2272c49ba8fbfdde5661b2
+  - RawGuidValue: 56a2869c65ba7744ca08bf7687705cc6
+  - RawGuidValue: 01296dde756c3fe4888fa4c3b0aac9e6
+  spawnDelay: 5

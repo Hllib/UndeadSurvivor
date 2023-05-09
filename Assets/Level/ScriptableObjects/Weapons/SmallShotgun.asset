@@ -17,6 +17,7 @@ MonoBehaviour:
   damage: 5
   canFireMultiple: 0
   bulletSpeed: 15
+  shootRate: 1.2
   shootStartPoints:
     X: 0.8
     Y: -0.156

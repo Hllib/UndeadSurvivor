@@ -74,10 +74,13 @@ public class Bullet : NetworkBehaviour
 
             if (damagedObject != null)
             {
-                if(this != null)
+                if (this != null)
                 {
                     StopAllCoroutines();
-                    UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
+                    if (_player != null)
+                    {
+                        UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
+                    }
                     damagedObject.Damage(_damage);
                     if (Object != null)
                     {
