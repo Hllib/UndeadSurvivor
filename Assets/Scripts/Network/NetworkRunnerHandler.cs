@@ -11,13 +11,22 @@ using UnityEngine.SceneManagement;
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _networkRunner;
-    //[SerializeField] private NetworkPlayer _player;
-    [SerializeField] private GameObject _spawnPlayersNetwork;
-    [SerializeField] private NetworkInputHandler _playerInputHandler;
+    private NetworkInputHandler _playerInputHandler;
+    [SerializeField] private NetworkPrefabRef _playerPrefab;
+    public Dictionary<PlayerRef, NetworkObject> SpawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    [SerializeField] private GameObject _coverUI;
+    [SerializeField] private GameObject[] _spawnPoints;
 
     private void Start()
     {
-        InitializeNetworkRunner(_networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
+        StartCoroutine(LoadGame());
+    }
+
+    IEnumerator LoadGame()
+    {
+        var task = InitializeNetworkRunner(_networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
+        yield return new WaitUntil(() => task.IsCompleted);
+        _coverUI.SetActive(false);
     }
 
     private void Awake()
@@ -41,27 +50,56 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = gameMode,
             Address = address,
             Scene = scene,
-            SessionName = "UndeadSurvivor",
             Initialized = initialized,
-            SceneManager = sceneObjectProvider
+            SceneManager = sceneObjectProvider,
+            PlayerCount = 2
         });
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        var spawner = _networkRunner.Spawn(_spawnPlayersNetwork, transform.position, Quaternion.identity, player);
-        //runner.Spawn(_player, transform.position, Quaternion.identity, player);
+        if (runner.IsServer)
+        {
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, GetSpawnPos(), Quaternion.identity, player);
+            SpawnedCharacters.Add(player, networkPlayerObject);
+        }
+    }
+
+    Vector3 GetSpawnPos()
+    {
+        if (_spawnPoints.Length == 0)
+        {
+            return Vector3.zero;
+        }
+        else
+        {
+            return _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length)].transform.position;
+        }
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        var inputData = _playerInputHandler.GetNetworkInput();
-        input.Set(inputData);
+        if (_playerInputHandler == null && NetworkPlayer.Local != null)
+        {
+            _playerInputHandler = NetworkPlayer.Local.GetComponent<NetworkInputHandler>();
+        }
+
+        if (_playerInputHandler != null)
+        {
+            var inputData = _playerInputHandler.GetNetworkInput();
+            inputData.CanShoot = (inputData.ShootDirection.x != 0 || inputData.ShootDirection.y != 0) ? true : false;
+            input.Set(inputData);
+        }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        runner.Shutdown();
+    }
 
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+    {
+        runner.Shutdown(shutdownReason: ShutdownReason.HostMigration);
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
@@ -71,7 +109,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
-
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void OnConnectedToServer(NetworkRunner runner)
@@ -105,11 +143,6 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
-    {
-
-    }
-
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
 
     }

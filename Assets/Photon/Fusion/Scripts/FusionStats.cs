@@ -89,8 +89,8 @@ public class FusionStats : Fusion.Behaviour {
   /// <param name="runner"></param>
   /// <param name="parent">Generated FusionStats component and GameObject will be added as a child of this transform.</param>
   /// <param name="objectLayout">Uses a predefined position.</param>
-  /// <param name="netStatsMask">The network stats to be enabled. If left null, default statistics will be used.</param>
-  /// <param name="simStatsMask">The simulation stats to be enabled. If left null, default statistics will be used.</param>
+  /// <param name="netStatsMask">The network stats to be enabled. If left null, default Statistics will be used.</param>
+  /// <param name="simStatsMask">The simulation stats to be enabled. If left null, default Statistics will be used.</param>
   /// <returns></returns>
   public static FusionStats Create(Transform parent = null, NetworkRunner runner = null, DefaultLayouts? screenLayout = null, DefaultLayouts? objectLayout = null, Stats.NetStatFlags? netStatsMask = null, Stats.SimStatFlags? simStatsMask = null) {
 
@@ -229,7 +229,7 @@ public class FusionStats : Fusion.Behaviour {
   }
 
   /// <summary>
-  ///  The size of the canvas when <see cref="CanvasType"/> is set to <see cref="StatCanvasTypes.GameObject"/>.
+  ///  The size of the _playerCanvas when <see cref="CanvasType"/> is set to <see cref="StatCanvasTypes.GameObject"/>.
   /// </summary>
   [InlineHelp]
   [DrawIf(nameof(_canvasType), (long)StatCanvasTypes.GameObject, Hide = true)]
@@ -238,7 +238,7 @@ public class FusionStats : Fusion.Behaviour {
   public float CanvasScale = 5f;
 
   /// <summary>
-  /// The distance on the Z axis the canvas will be positioned. Allows moving the canvas in front of or behind the parent GameObject.
+  /// The distance on the Z axis the _playerCanvas will be positioned. Allows moving the _playerCanvas in front of or behind the parent GameObject.
   /// </summary>
   [InlineHelp]
   [DrawIf(nameof(_canvasType), (long)StatCanvasTypes.GameObject, Hide = true)]
@@ -247,7 +247,7 @@ public class FusionStats : Fusion.Behaviour {
   public float CanvasDistance = 0f;
 
   /// <summary>
-  /// The Rect which defines the position of the stats canvas on a GameObject. Sizes are normalized percentages.(ranges of 0f-1f).
+  /// The Rect which defines the position of the stats _playerCanvas on a GameObject. Sizes are normalized percentages.(ranges of 0f-1f).
   /// </summary>
   [InlineHelp]
   [SerializeField]
@@ -266,7 +266,7 @@ public class FusionStats : Fusion.Behaviour {
 
 
   /// <summary>
-  /// The Rect which defines the position of the stats canvas overlay on the screen. Sizes are normalized percentages.(ranges of 0f-1f).
+  /// The Rect which defines the position of the stats _playerCanvas overlay on the screen. Sizes are normalized percentages.(ranges of 0f-1f).
   /// </summary>
   [InlineHelp]
   [SerializeField]
@@ -299,7 +299,7 @@ public class FusionStats : Fusion.Behaviour {
   }
 
   /// <summary>
-  /// UI Text on FusionGraphs can only overlay the bar graph if the canvas is perfectly facing the camera. 
+  /// UI Text on FusionGraphs can only overlay the bar graph if the _playerCanvas is perfectly facing the camera. 
   /// Any other angles will result in ZBuffer fighting between the text and the graph bar shader.
   /// For uses where perfect camera billboarding is not possible (such as VR), this toggle prevents FusionGraph layouts being used where text and graphs overlap.
   /// Normally leave this unchecked, unless you are experiencing corrupted text rendering.
@@ -834,7 +834,7 @@ public class FusionStats : Fusion.Behaviour {
     if (Application.isPlaying == false) {
 #if UNITY_EDITOR
       if (_canvas) {
-        //// Hide canvas for rebuild, Unity makes this ugly.
+        //// Hide _playerCanvas for rebuild, Unity makes this ugly.
         if (EditorApplication.isCompiling == false) {
           //_canvas.enabled = false;
           UnityEditor.EditorApplication.delayCall += CalculateLayout;
@@ -1115,7 +1115,7 @@ public class FusionStats : Fusion.Behaviour {
       CreateGraph(Stats.StatSourceTypes.Simulation, i, _graphsLayoutRT);
     }
 
-    // Hide canvas for a tick. Unity makes some ugliness on the first update.
+    // Hide _playerCanvas for a tick. Unity makes some ugliness on the first update.
     //_canvas.enabled = false;
     _activeDirty = true;
 

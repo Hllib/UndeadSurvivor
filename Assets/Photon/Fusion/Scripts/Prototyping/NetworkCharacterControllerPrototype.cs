@@ -30,7 +30,7 @@ public class NetworkCharacterControllerPrototype : NetworkTransform {
   protected override Vector3 DefaultTeleportInterpolationVelocity => Velocity;
 
   /// <summary>
-  /// Sets the default teleport interpolation angular velocity to be the CC's rotation speed on the Z axis.
+  /// Sets the default teleport interpolation angular velocity to be the CC's rotation Speed on the Z axis.
   /// For more details on how this field is used, see <see cref="NetworkTransform.TeleportToRotation"/>.
   /// </summary>
   protected override Vector3 DefaultTeleportInterpolationAngularVelocity => new Vector3(0f, 0f, rotationSpeed);
@@ -80,8 +80,8 @@ public class NetworkCharacterControllerPrototype : NetworkTransform {
   }
 
   /// <summary>
-  /// Basic implementation of a character controller's movement function based on an intended direction.
-  /// <param name="direction">Intended movement direction, subject to movement query, acceleration and max speed values.</param>
+  /// Basic implementation of a character controller's movement function based on an intended MoveDirection.
+  /// <param name="direction">Intended movement MoveDirection, subject to movement query, acceleration and max Speed values.</param>
   /// </summary>
   public virtual void Move(Vector3 direction) {
     var deltaTime    = Runner.DeltaTime;

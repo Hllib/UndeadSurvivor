@@ -197,7 +197,7 @@ public abstract class FusionGraphBase : Fusion.Behaviour, IFusionStatsView {
       _fusionStats = GetComponentInParent<FusionStats>();
     }
 
-    // Any data connection requires a runner for the statistics source.
+    // Any data connection requires a runner for the Statistics source.
     var runner = _fusionStats?.Runner;
 
     var statistics = runner?.Simulation?.Stats;

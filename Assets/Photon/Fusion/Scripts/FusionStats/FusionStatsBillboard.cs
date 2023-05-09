@@ -3,7 +3,7 @@ using UnityEngine;
 using Fusion;
 
 /// <summary>
-/// Companion component for <see cref="FusionStats"/>, which automatically faces this GameObject toward the supplied Camera. If Camera == null, will face towards Camera.main.
+/// Companion component for <see cref="FusionStats"/>, which automatically faces this GameObject toward the supplied Camera. If Camera == null, will Face towards Camera.main.
 /// </summary>
 [Fusion.ScriptHelp(BackColor = EditorHeaderBackColor.Olive)]
 [ExecuteAlways]

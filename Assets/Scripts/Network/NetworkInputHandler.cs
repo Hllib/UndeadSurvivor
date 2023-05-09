@@ -5,23 +5,32 @@ using UnityEngine;
 
 public class NetworkInputHandler : MonoBehaviour
 {
-    private float _speed = 5.0f;
-    //public delegate void MovementSender(float hor, float ver);
-    //public event MovementSender onPlayerInput;
+    private NetworkPlayer _player;
+    [SerializeField] private VariableJoystick moveJoystick;
+    [SerializeField] private VariableJoystick shootJoystick;
+    private float _speed = 5f;
+
+    private void Awake()
+    {
+        _player = GetComponent<NetworkPlayer>();
+        _player.OnUIInstantiated += FindJoysticks;
+    }
+
+    private void FindJoysticks(object sender, EventArgs e)
+    {
+        moveJoystick = GameObject.FindGameObjectWithTag("MoveJoystick").GetComponent<VariableJoystick>();
+        shootJoystick = GameObject.FindGameObjectWithTag("ShootJoystick").GetComponent<VariableJoystick>();
+    }
 
     public NetworkInputData GetNetworkInput()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        NetworkInputData data = new NetworkInputData();
+        if (moveJoystick != null && shootJoystick != null)
+        {
+            data.MoveDirection = Vector2.up * moveJoystick.Vertical * _speed + Vector2.right * moveJoystick.Horizontal * _speed;
+            data.ShootDirection = Vector2.up * shootJoystick.Vertical + Vector2.right * shootJoystick.Horizontal;
+        }
 
-        NetworkInputData networkInputData = new NetworkInputData();
-        networkInputData.direction = new Vector2(horizontalInput * _speed, verticalInput * _speed);
-
-        Debug.Log("Horizontal input: " + horizontalInput);
-        Debug.Log("Vertical input: " + verticalInput);
-
-        //onPlayerInput?.Invoke(horizontalInput, verticalInput);
-
-        return networkInputData;
+        return data;
     }
 }

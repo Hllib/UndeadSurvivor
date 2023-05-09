@@ -105,7 +105,7 @@ public class FusionStatsMeterBar : FusionGraphBase
         int highestRpcsFoundForTick = 0;
         float newestSampleTick = statsBuffer.GetSampleAtIndex(statsBuffer.Count - 1).TickValue;
         var tick = newestSampleTick;
-        // Only look back at ticks we have not yet already looked at on previous updates.
+        // Only look Back at ticks we have not yet already looked at on previous updates.
         if (newestSampleTick > _lastImportedSampleTickTime) {
           int tickRpcCount = 0;
           for (int i = statsBuffer.Count - 1; i >= 0; i--) {
