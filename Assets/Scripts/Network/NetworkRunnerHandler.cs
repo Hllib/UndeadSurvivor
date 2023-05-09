@@ -17,7 +17,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private GameObject _coverUI;
 
     private void Start()
-    { 
+    {
         StartCoroutine(LoadGame());
     }
 
@@ -80,12 +80,12 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if(_playerInputHandler == null && NetworkPlayer.Local != null)
+        if (_playerInputHandler == null && NetworkPlayer.Local != null)
         {
             _playerInputHandler = NetworkPlayer.Local.GetComponent<NetworkInputHandler>();
         }
 
-        if(_playerInputHandler != null)
+        if (_playerInputHandler != null)
         {
             var inputData = _playerInputHandler.GetNetworkInput();
             inputData.canShoot = (inputData.shootDirection.x != 0 || inputData.shootDirection.y != 0) ? true : false;

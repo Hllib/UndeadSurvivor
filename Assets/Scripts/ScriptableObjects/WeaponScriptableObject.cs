@@ -12,6 +12,7 @@ public class WeaponScriptableObject : ScriptableObject
     public int damage;
     public bool canFireMultiple;
     public float bulletSpeed;
+    public float shootRate;
 
     [Serializable]
     public struct ShootStartPoints

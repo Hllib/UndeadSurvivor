@@ -25,7 +25,7 @@ public class SkeletBullet : NetworkBehaviour
     IEnumerator DestroyBullet()
     {
         yield return new WaitForSeconds(1.5f);
-        Runner.Despawn(Object);
+        Destroy(gameObject);
     }
 
     public void AssignData(int damage, Vector3 direction)

@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerWeaponHandler : NetworkBehaviour
@@ -15,8 +16,8 @@ public class PlayerWeaponHandler : NetworkBehaviour
     private int _multipleShootAmount = 3;
     private int _ammoAmount;
 
-    private float canShoot = 0f;
-    private float shootRate = 1.5f;
+    private float _canShoot = 0f;
+    private float _shootRate = 1.5f;
     private bool _canWeaponFireMultiple;
 
     public delegate void AmmoSender(int ammoAmount);
@@ -67,6 +68,12 @@ public class PlayerWeaponHandler : NetworkBehaviour
         _canWeaponFireMultiple = state;
     }
 
+    [Rpc]
+    private void RPC_UpdateShootRate(float shootRate, RpcInfo info = default)
+    {
+        _shootRate = shootRate;
+    }
+
     public void AssignWeapon(WeaponScriptableObject weaponSO)
     {
         _weaponSO = weaponSO;
@@ -74,6 +81,7 @@ public class PlayerWeaponHandler : NetworkBehaviour
         _weaponSpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Weapons/" + _weaponSO.title);
         RPC_SetFireMultiple(_weaponSO.canFireMultiple);
         RPC_ShowWeapon(_weaponSO.title);
+        RPC_UpdateShootRate(_weaponSO.shootRate);
     }
 
     [Rpc]
@@ -89,10 +97,10 @@ public class PlayerWeaponHandler : NetworkBehaviour
 
         if (_weaponSO != null && inputData.canShoot)
         {
-            if (Time.time > canShoot && _ammoAmount > 0)
+            if (Time.time > _canShoot && _ammoAmount > 0)
             {
                 RPC_Shoot();
-                canShoot = Time.time + shootRate;
+                _canShoot = Time.time + _shootRate;
             }
         }
     }
@@ -120,8 +128,6 @@ public class PlayerWeaponHandler : NetworkBehaviour
             {
                 Vector3 startPosition = new Vector3(_gunPoint.transform.position.x, _gunPoint.transform.position.y + offset, _gunPoint.transform.position.z);
                 var bullet = Runner.Spawn(_bulletPrefab, startPosition, Quaternion.identity, Object.InputAuthority);
-                Debug.Log(bullet.name);
-                Debug.Log(GetComponent<NetworkPlayer>().playerName);
                 bullet.GetComponent<Bullet>().AssignData(_weaponSO.bulletSpeed, _weaponSO.damage, _gunPoint.transform.right, GetComponent<NetworkPlayer>());
                 offset += 0.3f;
             }

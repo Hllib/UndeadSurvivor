@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c899835addd8085408e34ddd5ab0af0c, type: 3}
+  m_Name: EnemySpawner
+  m_EditorClassIdentifier: 
+  spawnObjects:
+  - RawGuidValue: 4949c232127c1194cacc8ba39ade1948
+  - RawGuidValue: ea0e8af694e83ed428f78c05bddd7d32
+  - RawGuidValue: 1276af2e1682f784691327a6627d701d
+  spawnDelay: 3.5

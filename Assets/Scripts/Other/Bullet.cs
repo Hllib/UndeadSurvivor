@@ -28,7 +28,7 @@ public class Bullet : NetworkBehaviour
     IEnumerator DestroyBullet()
     {
         yield return new WaitForSeconds(1.5f);
-        Runner.Despawn(Object);
+        Destroy(gameObject);
     }
 
     private void SetSpeed(float speed)
@@ -74,10 +74,13 @@ public class Bullet : NetworkBehaviour
 
             if (damagedObject != null)
             {
-                if(this != null)
+                if (this != null)
                 {
                     StopAllCoroutines();
-                    UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
+                    if (_player != null)
+                    {
+                        UpdatePlayerScore(_damage, damagedObject.Health <= _damage);
+                    }
                     damagedObject.Damage(_damage);
                     if (Object != null)
                     {

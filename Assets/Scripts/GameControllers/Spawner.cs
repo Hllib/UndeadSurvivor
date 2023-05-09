@@ -1,34 +1,29 @@
+using Fusion;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Fusion;
-using System;
 
-public class CollectablesSpawner : NetworkBehaviour
+public class Spawner : NetworkBehaviour
 {
-    [SerializeField] private NetworkPrefabRef[] _initialWeapons;
-    [SerializeField] private GameObject[] _weaponSpawnPoints;
+    [SerializeField] private SpawnerScriptableObject _spawnerSO;
     [SerializeField] private GameObject[] _spawnPoints;
-    [SerializeField] private NetworkPrefabRef[] _collectables;
     public bool StopWave { get; set; }
-    private float _spawnDelay = 5f;
 
-    public void SpawnInitialWeapons()
+    private NetworkPrefabRef[] _enemies;
+    private float _spawnDelay;
+
+    private void Awake()
     {
-        int index = 0;
-
-        for (int i = 0; i < _initialWeapons.Length; i++)
-        {
-            Runner.Spawn(_initialWeapons[i], _weaponSpawnPoints[index].transform.position, Quaternion.identity);
-            index++;
-        }
+        _enemies = _spawnerSO.spawnObjects;
+        _spawnDelay = _spawnerSO.spawnDelay;
     }
 
-    public enum CollectableType
+    public enum ObjectType
     {
-        Ammo,
-        HealthKit,
-        Bomb
+        Object1,
+        Object2,
+        Object3
     }
 
     public enum SpawnWave
@@ -37,15 +32,16 @@ public class CollectablesSpawner : NetworkBehaviour
         Wave2 = 2,
         Wave3 = 3
     }
+
     public void StartWave(int waveId)
     {
         StartSpawning((SpawnWave)Enum.ToObject(typeof(SpawnWave), waveId));
     }
 
-    private void SpawnCollectable(CollectableType collectableType)
+    private void SpawnEnemy(ObjectType enemyType)
     {
         var spawnPoint = UnityEngine.Random.Range(0, _spawnPoints.Length);
-        NetworkObject collectable = Runner.Spawn(_collectables[(int)collectableType], GetSpawnPos(), Quaternion.identity);
+        NetworkObject enemy = Runner.Spawn(_enemies[(int)enemyType], GetSpawnPos(), Quaternion.identity);
     }
 
     Vector3 GetSpawnPos()
@@ -74,7 +70,7 @@ public class CollectablesSpawner : NetworkBehaviour
     {
         while (!StopWave)
         {
-            SpawnCollectable(CollectableType.Ammo);
+            SpawnEnemy(ObjectType.Object1);
             yield return new WaitForSeconds(_spawnDelay);
         }
     }
@@ -84,8 +80,8 @@ public class CollectablesSpawner : NetworkBehaviour
         while (!StopWave)
         {
             yield return new WaitForSeconds(_spawnDelay);
-            int[] collectableVariants = new int[] { (int)CollectableType.Ammo, (int)CollectableType.HealthKit };
-            SpawnCollectable((CollectableType)Enum.ToObject(typeof(CollectableType), UnityEngine.Random.Range(collectableVariants[0], collectableVariants[collectableVariants.Length - 1] + 1)));
+            int[] enemyVariants = new int[] { (int)ObjectType.Object1, (int)ObjectType.Object3 };
+            SpawnEnemy((ObjectType)Enum.ToObject(typeof(ObjectType), UnityEngine.Random.Range(enemyVariants[0], enemyVariants[enemyVariants.Length - 1])));
         }
     }
 
@@ -94,8 +90,8 @@ public class CollectablesSpawner : NetworkBehaviour
         while (!StopWave)
         {
             yield return new WaitForSeconds(_spawnDelay);
-            int[] collectableVariants = new int[] { (int)CollectableType.Ammo, (int)CollectableType.HealthKit, (int)CollectableType.Bomb };
-            SpawnCollectable((CollectableType)Enum.ToObject(typeof(CollectableType), UnityEngine.Random.Range(collectableVariants[0], collectableVariants[collectableVariants.Length - 1] + 1)));
+            int[] enemyVariants = new int[] { (int)ObjectType.Object1, (int)ObjectType.Object2, (int)ObjectType.Object3 };
+            SpawnEnemy((ObjectType)Enum.ToObject(typeof(ObjectType), UnityEngine.Random.Range(enemyVariants[0], enemyVariants[enemyVariants.Length - 1] + 1)));
         }
     }
 
