@@ -1,15 +1,12 @@
-using Fusion;
-using UnityEngine;
+using Collectables;
 
-public class BombCollectable : NetworkBehaviour
+public class BombCollectable : TriggerableByPlayer
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void ActionOnTrigger(NetworkPlayer player)
     {
-        var player = collision.gameObject.GetComponent<NetworkPlayer>();
-        if (player != null)
-        {
-            player.AddBomb();
-            Runner.Despawn(Object);
-        }
+        base.ActionOnTrigger(player);         
+        
+        player.AddBomb();
+        Runner.Despawn(Object);
     }
 }

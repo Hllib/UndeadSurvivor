@@ -32,7 +32,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
     [SerializeField] private GameObject _playerCanvas;
     [SerializeField] private Bomb _bombPrefab;
     [SerializeField] private NetworkPlayerAnimator _networkAnimator;
-    [SerializeField] private PlayerWeaponHandler _weaponHandler;
+    [field: SerializeField] public PlayerWeaponHandler WeaponHandler { get; private set; }
     private GameObject _canvas;
 
     public void AddBomb()
@@ -126,7 +126,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft, IDamageable
         {
             _rb.Rigidbody.velocity = data.MoveDirection;
             _networkAnimator.RPC_ChooseAnimation(data);
-            _weaponHandler.RPC_Aim(data);
+            WeaponHandler.RPC_Aim(data);
         }
     }
 

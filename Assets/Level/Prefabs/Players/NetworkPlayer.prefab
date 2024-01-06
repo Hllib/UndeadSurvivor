@@ -202,14 +202,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  damageDone: 0
-  enemiesKilled: 0
-  bombAmount: 0
-  playerName: 
   _playerCanvas: {fileID: 2960989504694723415, guid: 31791279ed928ca49813a580114afa84, type: 3}
   _bombPrefab: {fileID: 396455281878363753, guid: be600dd4086c24d4db53de1f3d7cb3e2, type: 3}
   _networkAnimator: {fileID: 5287842833491222230}
   _weaponHandler: {fileID: 7553475836948003975}
+  <WeaponHandler>k__BackingField: {fileID: 7553475836948003975}
 --- !u!114 &5287842833491222230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +226,7 @@ MonoBehaviour:
   - {fileID: 9100000, guid: f9a20f3a58959f84c8ecc764723beb60, type: 2}
   - {fileID: 9100000, guid: 33d892d8742bc3b4b85a857de9e9edc0, type: 2}
   - {fileID: 9100000, guid: 98c5eeb113b9a3d478092657764dabd7, type: 2}
-  _playerSkinSetter: {fileID: 0}
+  _animatorId: 0
 --- !u!114 &7553475836948003975
 MonoBehaviour:
   m_ObjectHideFlags: 0

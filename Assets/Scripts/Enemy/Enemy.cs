@@ -31,8 +31,8 @@ public abstract class Enemy : NetworkBehaviour
 
     protected virtual void Init()
     {
-        this.Animator = GetComponent<Animator>();
-        this.SpriteRenderer = GetComponent<SpriteRenderer>();
+        Animator = GetComponent<Animator>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         FindPlayers();
         if (Player != null)

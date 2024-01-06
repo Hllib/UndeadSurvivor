@@ -1,19 +1,15 @@
-using Fusion;
-using System.Collections;
-using System.Collections.Generic;
+using Collectables;
 using UnityEngine;
 
-public class HealthKit : NetworkBehaviour
+public class HealthKit : TriggerableByPlayer
 {
-    private int _healthToAdd = 3;
+    [SerializeField] private int _healthToAdd = 3;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void ActionOnTrigger(NetworkPlayer player)
     {
-        var player = collision.gameObject.GetComponent<NetworkPlayer>();
-        if (player != null)
-        {
-            player.UpdateHealth(_healthToAdd, true);
-            Runner.Despawn(Object);
-        }
+        base.ActionOnTrigger(player);
+        
+        player.UpdateHealth(_healthToAdd, true);
+        Runner.Despawn(Object);
     }
 }
